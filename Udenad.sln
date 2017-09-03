@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.0.0
 MinimumVisualStudioVersion = 10.0.0.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Udenad.Import", "Udenad.Import/Udenad.Import.csproj", "{8BD27C83-0EEE-4220-930C-E764524952A2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{32662B23-FC95-4D75-B616-4964CFEADB0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Udenad.Import", "src\Udenad.Import\Udenad.Import.csproj", "{63E251C5-E23B-4644-9B70-763A82BD36F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +13,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8BD27C83-0EEE-4220-930C-E764524952A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BD27C83-0EEE-4220-930C-E764524952A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BD27C83-0EEE-4220-930C-E764524952A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BD27C83-0EEE-4220-930C-E764524952A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63E251C5-E23B-4644-9B70-763A82BD36F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63E251C5-E23B-4644-9B70-763A82BD36F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63E251C5-E23B-4644-9B70-763A82BD36F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63E251C5-E23B-4644-9B70-763A82BD36F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63E251C5-E23B-4644-9B70-763A82BD36F7} = {32662B23-FC95-4D75-B616-4964CFEADB0C}
 	EndGlobalSection
 EndGlobal
