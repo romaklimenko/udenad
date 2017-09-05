@@ -7,6 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{32662B23-FC9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Udenad.Import", "src\Udenad.Import\Udenad.Import.csproj", "{63E251C5-E23B-4644-9B70-763A82BD36F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Udenad.Core", "src\Udenad.Core\Udenad.Core.csproj", "{A672A67F-18B6-4ECF-B4B2-EE946986741D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9067075C-1B6B-4862-B173-58A648036A24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Udenad.Core.Tests", "tests\Udenad.Core.Tests\Udenad.Core.Tests.csproj", "{62199980-336E-41FA-B13A-AB6CC332A287}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,11 +23,21 @@ Global
 		{63E251C5-E23B-4644-9B70-763A82BD36F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E251C5-E23B-4644-9B70-763A82BD36F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63E251C5-E23B-4644-9B70-763A82BD36F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A672A67F-18B6-4ECF-B4B2-EE946986741D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A672A67F-18B6-4ECF-B4B2-EE946986741D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A672A67F-18B6-4ECF-B4B2-EE946986741D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A672A67F-18B6-4ECF-B4B2-EE946986741D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62199980-336E-41FA-B13A-AB6CC332A287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62199980-336E-41FA-B13A-AB6CC332A287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62199980-336E-41FA-B13A-AB6CC332A287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62199980-336E-41FA-B13A-AB6CC332A287}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{63E251C5-E23B-4644-9B70-763A82BD36F7} = {32662B23-FC95-4D75-B616-4964CFEADB0C}
+		{A672A67F-18B6-4ECF-B4B2-EE946986741D} = {32662B23-FC95-4D75-B616-4964CFEADB0C}
+		{62199980-336E-41FA-B13A-AB6CC332A287} = {9067075C-1B6B-4862-B173-58A648036A24}
 	EndGlobalSection
 EndGlobal

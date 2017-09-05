@@ -5,8 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using Udenad.Core;
 
 namespace Udenad.Import
 {
@@ -20,13 +20,15 @@ namespace Udenad.Import
             "y", "z", "æ", "ø", "å"
         };
 
-        private static IMongoCollection<WordDocument> WordsCollection =>
+        private static IMongoCollection<Card> WordsCollection =>
             new MongoClient()
                 .GetDatabase("udenad")
-                .GetCollection<WordDocument>("words");
+                .GetCollection<Card>("words");
 
-        private static void Main() =>
+        private static void Main()
+        {
             MainAsync().GetAwaiter().GetResult();
+        }
 
         private static async Task MainAsync()
         {
@@ -39,12 +41,11 @@ namespace Udenad.Import
         private static async Task FetchWordDefinitionsAsync()
         {
             var cursor = await WordsCollection.FindAsync(
-                Builders<WordDocument>.Filter.Eq<string>(nameof(WordDocument.Definitions), null) &
-                Builders<WordDocument>.Filter.Eq<string>(nameof(WordDocument.Inflection), null) &
-                Builders<WordDocument>.Filter.Eq<string>(nameof(WordDocument.WordClass), null));
+                Builders<Card>.Filter.Eq<string>(nameof(Card.Definitions), null) &
+                Builders<Card>.Filter.Eq<string>(nameof(Card.Inflection), null) &
+                Builders<Card>.Filter.Eq<string>(nameof(Card.WordClass), null));
 
             while (cursor.MoveNext())
-            {
                 foreach (var word in cursor.Current
                     .Select(w => w.Word)
                     .AsParallel())
@@ -82,11 +83,9 @@ namespace Udenad.Import
                             .ToArray();
 
                     foreach (var definition in definitions ?? Enumerable.Empty<string>())
-                    {
                         Console.WriteLine($"\tDefinition: {definition}");
-                    }
 
-                    await UpsertWord(new WordDocument
+                    await UpsertWord(new Card
                     {
                         Word = word,
                         WordClass = wordclass,
@@ -94,18 +93,19 @@ namespace Udenad.Import
                         Definitions = definitions
                     });
                 }
-            }
         }
 
-        private static async Task UpsertWord(WordDocument wordDocument) =>
+        private static async Task UpsertWord(Card card)
+        {
             await WordsCollection
                 .ReplaceOneAsync(
-                    Builders<WordDocument>.Filter.Eq(nameof(WordDocument.Word), wordDocument.Word),
-                    wordDocument,
+                    Builders<Card>.Filter.Eq(nameof(Card.Word), card.Word),
+                    card,
                     new UpdateOptions
                     {
                         IsUpsert = true
                     });
+        }
 
         private static async Task FetchWordsAsync(string prefix = "")
         {
@@ -145,27 +145,15 @@ namespace Udenad.Import
 
         private static async Task SaveWordAsync(string word)
         {
-            if(string.IsNullOrEmpty(word)) return;
+            if (string.IsNullOrEmpty(word)) return;
 
             await UpsertWord(
-                new WordDocument
+                new Card
                 {
                     Word = word
                 });
 
             Console.WriteLine(word);
         }
-    }
-
-    public class WordDocument
-    {
-        [BsonId]
-        public string Word { get; set; }
-
-        public string WordClass { get; set; }
-
-        public string Inflection { get; set; }
-
-        public string[] Definitions { get; set; }
     }
 }
