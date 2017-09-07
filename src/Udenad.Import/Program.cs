@@ -10,7 +10,7 @@ using Udenad.Core;
 
 namespace Udenad.Import
 {
-    internal class Program
+    internal static class Program
     {
         private static IEnumerable<string> Abc => new[]
         {
@@ -20,10 +20,10 @@ namespace Udenad.Import
             "y", "z", "æ", "ø", "å"
         };
 
-        private static IMongoCollection<Card> WordsCollection =>
+        private static IMongoCollection<Card> CardsCollection =>
             new MongoClient()
                 .GetDatabase("udenad")
-                .GetCollection<Card>("words");
+                .GetCollection<Card>("cards");
 
         private static void Main()
         {
@@ -40,7 +40,7 @@ namespace Udenad.Import
 
         private static async Task FetchWordDefinitionsAsync()
         {
-            var cursor = await WordsCollection.FindAsync(
+            var cursor = await CardsCollection.FindAsync(
                 Builders<Card>.Filter.Eq<string>(nameof(Card.Definitions), null) &
                 Builders<Card>.Filter.Eq<string>(nameof(Card.Inflection), null) &
                 Builders<Card>.Filter.Eq<string>(nameof(Card.WordClass), null));
@@ -97,7 +97,7 @@ namespace Udenad.Import
 
         private static async Task UpsertWord(Card card)
         {
-            await WordsCollection
+            await CardsCollection
                 .ReplaceOneAsync(
                     Builders<Card>.Filter.Eq(nameof(Card.Word), card.Word),
                     card,
