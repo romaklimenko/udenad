@@ -17,7 +17,9 @@ namespace Udenad.Core
         public string WordClass { get; set; }
         public string Inflection { get; set; }
         public string[] Definitions { get; set; }
+        public string Notes { get; set; }
 
+        [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         public DateTime? NextDate { get; set; }
 
         public double Easiness
@@ -35,5 +37,38 @@ namespace Udenad.Core
         public int Repetitions { get; set; }
 
         public Score Score { get; set; }
+        
+        public void Review(Score score)
+        {
+            Score = score;
+
+            if ((int) score < 3)
+                Repetitions = 1;
+            else
+                Repetitions++;
+
+            switch (Repetitions)
+            {
+                case 1:
+                    // I(1) := 1
+                    LastInterval = 1;
+                    break;
+                case 2:
+                    // I(2) := 6
+                    LastInterval = 6;
+                    break;
+                default:
+                    // for n > 2 I(n) := I(n-1) * EF 
+                    LastInterval = (int) Math.Ceiling(LastInterval * Easiness);
+                    break;
+            }
+
+            // EF' := EF - 0.8 + 0.28 * q - 0.02 * q * q
+            Easiness = Math.Max(
+                SmallestEasiness,
+                Easiness - 0.8 + 0.28 * (int) score - 0.02 * (int) score * (int) score);
+
+            NextDate = DateTime.UtcNow.Date.AddDays(LastInterval);
+        }
     }
 }

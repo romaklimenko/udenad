@@ -1,35 +1,26 @@
-﻿namespace Udenad.Core
+﻿using System.ComponentModel;
+
+namespace Udenad.Core
 {
     public enum Score : byte
     {
-        /// <summary>
-        ///     5 - perfect response
-        /// </summary>
+        [Description("5 - perfect response")]
         S5 = 5,
 
-        /// <summary>
-        ///     4 - correct response after a hesitation
-        /// </summary>
+        [Description("4 - correct response after a hesitation")]
         S4 = 4,
 
-        /// <summary>
-        ///     3 - correct response recalled with serious difficulty
-        /// </summary>
+        [Description("3 - correct response recalled with serious difficulty")]
         S3 = 3,
 
-        /// <summary>
-        ///     2 - incorrect response; where the correct one seemed easy to recall
-        /// </summary>
+
+        [Description("2 - incorrect response; where the correct one seemed easy to recall")]
         S2 = 2,
 
-        /// <summary>
-        ///     1 - incorrect response; the correct one remembered
-        /// </summary>
+        [Description("1 - incorrect response; the correct one remembered")]
         S1 = 1,
 
-        /// <summary>
-        ///     0 - complete blackout.
-        /// </summary>
+        [Description("0 - complete blackout")]
         S0 = 0
     }
 }
