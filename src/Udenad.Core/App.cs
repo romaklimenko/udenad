@@ -14,7 +14,7 @@ namespace Udenad.Core
         
         public async Task<Card> GetNextCard()
         {
-            var result = await FindRandomOneAsync(c => c.NextDate >= DateTime.Today) // 1. due date
+            var result = await FindRandomOneAsync(c => c.NextDate <= DateTime.Today) // 1. due date
                          ??
                          await FindRandomOneAsync(c => (int) c.Score < 3); // 2. bad score
 
@@ -35,7 +35,14 @@ namespace Udenad.Core
 
         public async Task SaveCardAsync(Card card)
         {
-            //
+            await CardsCollection
+                .ReplaceOneAsync(
+                    Builders<Card>.Filter.Eq(nameof(Card.Word), card.Word),
+                    card,
+                    new UpdateOptions
+                    {
+                        IsUpsert = true
+                    });
         }
     }
 }
