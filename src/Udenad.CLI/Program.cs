@@ -40,29 +40,39 @@ namespace Udenad.CLI
             }
             Console.WriteLine("Noter:");
             Console.WriteLine($" {_card.Notes}");
+            Console.WriteLine("Score:");
+            var score = ReadScore(Score.S3);
+            Console.WriteLine($"  {score.GetDescription()}");
             Console.WriteLine();
-            Console.Write("Now type your score from 0 to 5: ");
-            await ScoreState(ReadScore());
+            await ScoreState(score);
         }
 
         private static async Task ScoreState(Score score)
-        {
+        {            
             _card.Review(score);
             await _app.SaveCardAsync(_card);
-            Console.WriteLine();
-            Console.WriteLine("--------");
-            Console.WriteLine();
             await FrontSideState();
         }
 
-        private static Score ReadScore()
+        private static Score ReadScore(Score score)
         {
-            if (!int.TryParse(Console.ReadLine(), out var score) || score <= 0 || score >= 6)
+            Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r");
+            Console.Write($"↓ {score.GetDescription()} ↑");
+
+            switch (Console.ReadKey(true).Key)
             {
-                return ReadScore();
+                case ConsoleKey.UpArrow:
+                    return (byte) score == 5 ?
+                        ReadScore(score) : ReadScore((Score) ((byte) score + 1));
+                case ConsoleKey.DownArrow:
+                    return (byte) score == 0 ?
+                        ReadScore(score) : ReadScore((Score) ((byte) score - 1));
+                case ConsoleKey.Enter:
+                    Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r");
+                    return score;
+                default:
+                    return ReadScore(score);
             }
-            Console.WriteLine($"Your score is: {score}");
-            return (Score) score;
         }
 
         private static void ReadEnter()
