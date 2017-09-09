@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Udenad.Core.Tests
 {
-    public class SuperMemo2Test
+    public class CardTest
     {
         [Theory]
         [InlineData(Score.S5, 1.4, 1)]

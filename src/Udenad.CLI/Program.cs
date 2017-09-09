@@ -43,7 +43,6 @@ namespace Udenad.CLI
             Console.WriteLine("Score:");
             var score = ReadScore(Score.S3);
             Console.WriteLine($"  {score.GetDescription()}");
-            Console.WriteLine();
             await ScoreState(score);
         }
 
@@ -51,6 +50,9 @@ namespace Udenad.CLI
         {            
             _card.Review(score);
             await _app.SaveCardAsync(_card);
+            var count = await _app.GetCountAsync(DateTime.Today);
+            Console.WriteLine($"{count.All} ord i alt, {count.Mature} modne, {count.Unseen} usete.");
+            Console.WriteLine();
             await FrontSideState();
         }
 
