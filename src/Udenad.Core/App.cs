@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Udenad.Core
@@ -19,11 +22,21 @@ namespace Udenad.Core
         
         public async Task<Card> GetNextCard()
         {
-            var result = await FindRandomOneAsync(c => c.NextDate <= DateTime.Today) // 1. due date
-                         ??
-                         await FindRandomOneAsync(c => (int) c.Score < 3); // 2. bad score
+            var due = CardsCollection.FindAsync(c => c.NextDate <= DateTime.Today); // 1. due date
+            var bad = CardsCollection.FindAsync(c => (int) c.Score < 3);            // 2. bad score
+            var unseen = FindRandomOneAsync(c => c.NextDate == null);               // 3. new
 
-            return result ?? await FindRandomOneAsync(c => c.NextDate == null); // 3. new
+            await Task.WhenAll(due, bad, unseen);
+
+            var cards = (await due.Result.ToListAsync())
+                .Union(await bad.Result.ToListAsync())
+                .Union(unseen.Result == null ?
+                    Enumerable.Empty<Card>() : Enumerable.Repeat(unseen.Result, 1))
+                .ToArray();
+
+            return cards
+                .Skip(new Random().Next(cards.Length))
+                .FirstOrDefault();
         }
 
         private async Task<Card> FindRandomOneAsync(Expression<Func<Card, bool>> filter)
@@ -31,11 +44,14 @@ namespace Udenad.Core
             var count = await CardsCollection
                 .Find(filter)
                 .CountAsync();
+
+            if (count == 0) return null;
+
             return await CardsCollection
                 .Find(filter)
                 .Skip(new Random()
                     .Next(Convert.ToInt32(Math.Min(int.MaxValue, count))))
-                .FirstOrDefaultAsync();
+                .FirstAsync();
         }
 
         public async Task<Count> GetCountAsync(DateTime date) =>
@@ -71,6 +87,8 @@ namespace Udenad.Core
         {
             // WONTFIX: it is slow but it is ok for now
             var all = CountAsync(c => true);
+            var bad = CountAsync(c => (int)c.Score < 3);
+            var due = CountAsync(c => c.NextDate <= DateTime.Today);
             var mature = CountAsync(c => c.NextDate > DateTime.Today.Date.AddDays(21));
             var unseen = CountAsync(c => c.NextDate == null);
             
@@ -81,6 +99,8 @@ namespace Udenad.Core
                 {
                     Date = DateTime.Today.Date,
                     All = all.Result,
+                    Bad = bad.Result,
+                    Due = due.Result,
                     Mature = mature.Result,
                     Unseen = unseen.Result
                 });

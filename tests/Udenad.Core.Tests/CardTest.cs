@@ -19,7 +19,7 @@ namespace Udenad.Core.Tests
 
             Assert.Equal(easiness, card.Easiness, 5);
             Assert.Equal(lastInterval, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(lastInterval), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(lastInterval), card.NextDate);
             Assert.Equal(1, card.Repetitions);
         }
 
@@ -42,7 +42,7 @@ namespace Udenad.Core.Tests
 
             Assert.Equal(easiness, card.Easiness);
             Assert.Equal(lastInterval, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(lastInterval), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(lastInterval), card.NextDate);
         }
 
         [Theory]
@@ -64,7 +64,7 @@ namespace Udenad.Core.Tests
 
             Assert.Equal(easiness, card.Easiness, 3);
             Assert.Equal(lastInterval, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(lastInterval), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(lastInterval), card.NextDate);
         }
 
         [Theory]
@@ -86,7 +86,7 @@ namespace Udenad.Core.Tests
 
             Assert.Equal(easiness, card.Easiness, 3);
             Assert.Equal(lastInterval, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(lastInterval), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(lastInterval), card.NextDate);
         }
 
         [Theory]
@@ -108,7 +108,7 @@ namespace Udenad.Core.Tests
 
             Assert.Equal(easiness, card.Easiness, 3);
             Assert.Equal(lastInterval, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(lastInterval), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(lastInterval), card.NextDate);
         }
 
         [Theory]
@@ -130,7 +130,7 @@ namespace Udenad.Core.Tests
 
             Assert.Equal(easiness, card.Easiness, 3);
             Assert.Equal(lastInterval, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(lastInterval), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(lastInterval), card.NextDate);
         }
 
         [Fact]
@@ -143,77 +143,77 @@ namespace Udenad.Core.Tests
             Assert.Equal(1, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(1, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(1), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(1), card.NextDate);
 
             card.Review(Score.S1);
 
             Assert.Equal(1, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(1, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(1), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(1), card.NextDate);
 
             card.Review(Score.S2);
 
             Assert.Equal(1, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(1, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(1), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(1), card.NextDate);
 
             card.Review(Score.S3);
 
             Assert.Equal(2, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(6, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(6), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(6), card.NextDate);
 
             card.Review(Score.S4);
 
             Assert.Equal(3, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(8, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(8), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(8), card.NextDate);
 
             card.Review(Score.S5);
 
             Assert.Equal(4, card.Repetitions);
             Assert.Equal(1.4, card.Easiness, 3);
             Assert.Equal(11, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(11), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(11), card.NextDate);
 
             card.Review(Score.S4);
 
             Assert.Equal(5, card.Repetitions);
             Assert.Equal(1.4, card.Easiness, 3);
             Assert.Equal(16, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(16), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(16), card.NextDate);
 
             card.Review(Score.S3);
 
             Assert.Equal(6, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(23, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(23), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(23), card.NextDate);
 
             card.Review(Score.S2);
 
             Assert.Equal(1, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(1, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(1), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(1), card.NextDate);
 
             card.Review(Score.S1);
 
             Assert.Equal(1, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(1, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(1), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(1), card.NextDate);
 
             card.Review(Score.S0);
 
             Assert.Equal(1, card.Repetitions);
             Assert.Equal(Card.SmallestEasiness, card.Easiness, 3);
             Assert.Equal(1, card.LastInterval);
-            Assert.Equal(DateTime.UtcNow.Date.AddDays(1), card.NextDate);
+            Assert.Equal(DateTime.Now.Date.AddDays(1), card.NextDate);
         }
     }
 }

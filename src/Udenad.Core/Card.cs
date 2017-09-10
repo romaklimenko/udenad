@@ -68,7 +68,7 @@ namespace Udenad.Core
                 SmallestEasiness,
                 Easiness - 0.8 + 0.28 * (int) score - 0.02 * (int) score * (int) score);
 
-            NextDate = DateTime.UtcNow.Date.AddDays(LastInterval);
+            NextDate = DateTime.Now.Date.AddDays(LastInterval);
         }
     }
 }

@@ -51,7 +51,8 @@ namespace Udenad.CLI
             _card.Review(score);
             await _app.SaveCardAsync(_card);
             var count = await _app.GetCountAsync(DateTime.Today);
-            Console.WriteLine($"{count.All} ord i alt, {count.Mature} modne, {count.Unseen} usete.");
+            Console.WriteLine(
+                $"{count.All} ord i alt, {count.Mature} modne, {count.Unseen} usete, {count.Due} skal oves og {count.Bad} er i dårlig kvalitet.");
             Console.WriteLine();
             await FrontSideState();
         }
