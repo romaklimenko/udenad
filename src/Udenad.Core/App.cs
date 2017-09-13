@@ -19,8 +19,13 @@ namespace Udenad.Core
             new MongoClient()
                 .GetDatabase("udenad")
                 .GetCollection<Count>("counts");
+
+        public async Task<Card> GetCardAsync(string word)
+        {
+            return await CardsCollection.Find(c => c.Word == word).SingleOrDefaultAsync();
+        }
         
-        public async Task<Card> GetNextCard()
+        public async Task<Card> GetNextCardAsync()
         {
             var due = CardsCollection.FindAsync(c => c.NextDate <= DateTime.Today); // 1. due date
             var bad = CardsCollection.FindAsync(c => (int) c.Score < 3);            // 2. bad score
@@ -57,6 +62,9 @@ namespace Udenad.Core
         public async Task<Count> GetCountAsync(DateTime date) =>
             await CountsCollection.Find(c => c.Date == date).FirstOrDefaultAsync();
 
+        public async Task<IEnumerable<Count>> GetCountsAsync() =>
+            await CountsCollection.Find(c => true).SortBy(c => c.Date).ToListAsync();
+
         public async Task SaveCardAsync(Card card)
         {
             await CardsCollection
@@ -83,7 +91,7 @@ namespace Udenad.Core
                     });
         }
 
-        private async Task SaveCountsAsync()
+        public async Task SaveCountsAsync()
         {
             // WONTFIX: it is slow but it is ok for now
             var all = CountAsync(c => true);

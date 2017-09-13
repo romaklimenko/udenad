@@ -1,12 +1,83 @@
-﻿<!DOCTYPE html>
+﻿@model ValueTuple<Udenad.Core.Card, Udenad.Core.Count>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-    <h1>Hello!</h1>      
+@{
+    ViewData["Title"] = "Hjem";
+}
+
+<div class="row justify-content-md-center">
+    <div>
+        <h1 id="word">@(Model.Item1.Word)</h1>
+        <div id="backside" hidden>
+            <div class="word-class">
+                <i>@(Model.Item1.WordClass)</i>
+            </div>
+            <div class="inflection">
+                <i>@(Model.Item1.Inflection)</i>
+            </div>
+            <ul>
+                @foreach (var definion in Model.Item1.Definitions ?? Enumerable.Empty<string>())
+                {
+                    <li>@(definion)</li>
+                }
+            </ul>
+            <hr>
+            <div>Din score:</div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="score" id="score-5" value="5" />
+                    5. Perfekt svar.
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="score" id="score-4" value="4" />
+                    4. Korrekt svar efter en tøven.
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="score" id="score-3" value="3" checked/>
+                    3. Korrekt svar tilbagekaldt med alvorlige vanskeligheder.
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="score" id="score-2" value="2" />
+                    2. Ukorrekt svar hvor det rigtige syntes at være let at huske.
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="score" id="score-1" value="1" />
+                    1. Forkert svar, men den rigtige blev husket.
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="score" id="score-0" value="0" />
+                    0. Absolut blackout.
+                </label>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+<div id="status-stats">
+    @(Model.Item2.All) ord i alt,
+    @(Model.Item2.Mature) modne,
+    @(Model.Item2.Unseen) usete,
+    @(Model.Item2.Due) skal oves i dag og
+    @(Model.Item2.Bad) er i dårlig kvalitet.
+</div>
+
+<div id="status-front">
+    Tryk på <kbd>enter</kbd> for at åbne detaljer.
+</div>
+
+<div id="status-back" hidden>
+    Tryk på <kbd>enter</kbd> for at åbne det næste ord.
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/home-index.js"></script>
+}
