@@ -17,6 +17,7 @@ namespace Udenad.Web.Controllers
 
 
         // GET /
+        [ResponseCache(Duration = 0)]
         public async Task<IActionResult> Index()
         {
             var card = await _app.GetNextCardAsync();
@@ -35,13 +36,15 @@ namespace Udenad.Web.Controllers
             card.Review(score);
 
             await _app.SaveCardAsync(card);
-            await _app.SaveCountsAsync();
 
             return Ok();
         }
 
         [HttpGet("charts")]
-        public async Task<IActionResult> Charts() =>
-            View(await _app.GetCountsAsync());
+        public IActionResult Charts() => View();
+        
+        [HttpGet("counts")]
+        public async Task<JsonResult> Counts() =>
+            Json(await _app.GetCountsAsync());
     }
 }

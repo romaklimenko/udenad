@@ -7,13 +7,13 @@
 <div class="row justify-content-md-center">
     <div>
         <h1 id="word">@(Model.Item1.Word)</h1>
+        <div class="word-class">
+            <i>@(Model.Item1.WordClass)</i>
+        </div>
+        <div class="inflection">
+            <i>@(Model.Item1.Inflection)</i>
+        </div>
         <div id="backside" hidden>
-            <div class="word-class">
-                <i>@(Model.Item1.WordClass)</i>
-            </div>
-            <div class="inflection">
-                <i>@(Model.Item1.Inflection)</i>
-            </div>
             <ul>
                 @foreach (var definion in Model.Item1.Definitions ?? Enumerable.Empty<string>())
                 {
