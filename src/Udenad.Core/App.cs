@@ -10,22 +10,23 @@ namespace Udenad.Core
 {
     public class App
     {
-        private IMongoCollection<Card> CardsCollection =>
-            new MongoClient()
-                .GetDatabase("udenad")
-                .GetCollection<Card>("cards");
-        
-        private IMongoCollection<Count> CountsCollection =>
-            new MongoClient()
-                .GetDatabase("udenad")
-                .GetCollection<Count>("counts");
+        private static IMongoClient MongoClient =>
+            new MongoClient();
 
-        public async Task<Card> GetCardAsync(string word)
-        {
-            return await CardsCollection.Find(c => c.Word == word).SingleOrDefaultAsync();
-        }
-        
-        public async Task<Card> GetNextCardAsync()
+        private static IMongoDatabase MongoDatabase =>
+            MongoClient.GetDatabase("udenad"); 
+
+        private static IMongoCollection<Card> CardsCollection =>
+            MongoDatabase.GetCollection<Card>("cards");
+
+        private static IMongoCollection<Count> CountsCollection =>
+            MongoDatabase.GetCollection<Count>("counts");
+
+        public static async Task<Card> GetCardAsync(string word) =>
+            await CardsCollection.Find(c => c.Word == word)
+                .SingleOrDefaultAsync();
+
+        public static async Task<Card> GetNextCardAsync()
         {
             var due = CardsCollection.FindAsync(c => c.NextDate <= DateTime.Today); // 1. due date
             var bad = CardsCollection.FindAsync(c => (int) c.Score < 3);            // 2. bad score
@@ -39,12 +40,14 @@ namespace Udenad.Core
                     Enumerable.Empty<Card>() : Enumerable.Repeat(unseen.Result, 1))
                 .ToArray();
 
-            return cards
+            var card = cards
                 .Skip(new Random().Next(cards.Length))
                 .FirstOrDefault();
+
+            return card;
         }
 
-        private async Task<Card> FindRandomOneAsync(Expression<Func<Card, bool>> filter)
+        private static async Task<Card> FindRandomOneAsync(Expression<Func<Card, bool>> filter)
         {
             var count = await CardsCollection
                 .Find(filter)
@@ -59,13 +62,13 @@ namespace Udenad.Core
                 .FirstAsync();
         }
 
-        public async Task<Count> GetCountAsync(DateTime date) =>
+        public static async Task<Count> GetCountAsync(DateTime date) =>
             await CountsCollection.Find(c => c.Date == date).FirstOrDefaultAsync();
 
-        public async Task<IEnumerable<Count>> GetCountsAsync() =>
+        public static async Task<IEnumerable<Count>> GetCountsAsync() =>
             await CountsCollection.Find(c => true).SortBy(c => c.Date).ToListAsync();
 
-        public async Task SaveCardAsync(Card card)
+        public static async Task SaveCardAsync(Card card)
         {
             await CardsCollection
                 .ReplaceOneAsync(
@@ -79,8 +82,7 @@ namespace Udenad.Core
             await SaveCountsAsync();
         }
 
-        private async Task SaveCountAsync(Count count)
-        {
+        private static async Task SaveCountAsync(Count count) =>
             await CountsCollection
                 .ReplaceOneAsync(
                     Builders<Count>.Filter.Eq(nameof(Count.Date), count.Date),
@@ -89,9 +91,8 @@ namespace Udenad.Core
                     {
                         IsUpsert = true
                     });
-        }
 
-        public async Task SaveCountsAsync()
+        public static async Task SaveCountsAsync()
         {
             // WONTFIX: it is slow but it is ok for now
             var all = CountAsync(c => true);
@@ -114,7 +115,7 @@ namespace Udenad.Core
                 });
         }
 
-        private async Task<long> CountAsync(Expression<Func<Card, bool>> expression) =>
+        private static async Task<long> CountAsync(Expression<Func<Card, bool>> expression) =>
             await CardsCollection.CountAsync(expression);
     }
 }

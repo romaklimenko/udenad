@@ -19,7 +19,7 @@ namespace Udenad.CLI
 
         private static async Task FrontSideState()
         {
-            _card = await _app.GetNextCardAsync();
+            _card = await App.GetNextCardAsync();
             Console.WriteLine("🇩🇰");
             Console.WriteLine("Ord:");
             Console.WriteLine($" {_card.Word}");
@@ -49,8 +49,8 @@ namespace Udenad.CLI
         private static async Task ScoreState(Score score)
         {            
             _card.Review(score);
-            await _app.SaveCardAsync(_card);
-            var count = await _app.GetCountAsync(DateTime.Today);
+            await App.SaveCardAsync(_card);
+            var count = await App.GetCountAsync(DateTime.Today);
             Console.WriteLine(
                 $"{count.All} ord i alt, {count.Mature} modne, {count.Unseen} usete, {count.Due} skal oves i dag og {count.Bad} er i dårlig kvalitet.");
             Console.WriteLine();

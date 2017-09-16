@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Udenad.Core;
@@ -7,36 +8,48 @@ namespace Udenad.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly App _app;
-
-        public HomeController(App app)
+        public HomeController()
         {
-            _app = app;
-            _app.SaveCountsAsync().GetAwaiter().GetResult();
+            App.SaveCountsAsync().GetAwaiter().GetResult();
         }
-
 
         // GET /
-        [ResponseCache(Duration = 0)]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Index()
         {
-            var card = await _app.GetNextCardAsync();
-            var count = await _app.GetCountAsync(DateTime.Today);
+            var card = App.GetNextCardAsync();
+            var count = App.GetCountAsync(DateTime.Today);
 
-            return View((Card: card, Count: count));
+            await Task.WhenAll(card, count);
+
+            return View((Card: card.Result, Count: count.Result));
         }
 
+        [HttpPost("notes")]
+        public async Task<IActionResult> Notes(string word, string notes)
+        {
+            var card = await App.GetCardAsync(word);
+            if (card == null)
+                return NotFound();
+
+            card.Notes = notes;
+
+            await App.SaveCardAsync(card);
+
+            return Ok(card);
+        }
+        
         [HttpPost("score")]
         public async Task<IActionResult> Score(string word, Score score)
         {
-            var card = await _app.GetCardAsync(word);
+            var card = await App.GetCardAsync(word);
             if (card == null)
                 return NotFound();
 
             card.Review(score);
 
-            await _app.SaveCardAsync(card);
-
+            await App.SaveCardAsync(card);
+            
             return Ok();
         }
 
@@ -45,6 +58,6 @@ namespace Udenad.Web.Controllers
         
         [HttpGet("counts")]
         public async Task<JsonResult> Counts() =>
-            Json(await _app.GetCountsAsync());
+            Json(await App.GetCountsAsync());
     }
 }

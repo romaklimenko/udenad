@@ -20,35 +20,45 @@ namespace Udenad.Core
         public string Notes { get; set; }
 
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
-        public DateTime? NextDate { get; set; }
+        public DateTime? NextDate { get; protected set; }
 
         public double Easiness
         {
             get => _easiness;
-            set => _easiness = Math.Max(SmallestEasiness, value);
+            private set => _easiness = Math.Max(SmallestEasiness, value);
         }
 
         public int LastInterval
         {
             get => _lastInterval;
-            set => _lastInterval = Math.Min(BiggestLastInterval, value);
+            private set => _lastInterval = Math.Min(BiggestLastInterval, value);
         }
 
-        public int Repetitions { get; set; }
+        public int Repetitions { get; private set; }
 
-        public Score Score { get; set; }
+        public Score Score { get; private set; }
         
         public void Review(Score score)
-        {
+        { 
+            if (NextDate != null && DateTime.Today < NextDate)
+                return;
+
             Score = score;
 
             if ((int) score < 3)
-                Repetitions = 1;
+            {
+                Repetitions = 0;
+            }
             else
+            {
                 Repetitions++;
-
+            }
+            
             switch (Repetitions)
             {
+                case 0:
+                    LastInterval = 0;
+                    break;
                 case 1:
                     // I(1) := 1
                     LastInterval = 1;

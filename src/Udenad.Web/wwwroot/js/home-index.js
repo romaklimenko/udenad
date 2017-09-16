@@ -1,6 +1,6 @@
 // states
-const FRONT = "FRONT";
-const BACK = "BACK";
+var FRONT = "FRONT";
+var BACK = "BACK";
 
 var state = FRONT;
 
@@ -9,13 +9,24 @@ $(function() {
     
     $(document).keypress(function (event) {
         if (isEnter(event)) {
-            if(state === FRONT) {
+            if ($("#notes").is(":focus")) {
+                $("input[name=score]:checked").focus();
+            }
+            else if(state === FRONT) {
                 showBackSide();
             }
             else {
                 saveScore();
             }
         }
+    });
+    
+    $("#notes").focusout(function () {
+        var word = $("#word").text();
+        var notes = $("#notes").text();
+        $.post("notes", { word: word, notes: notes }, function (data) {
+            console.log(data);
+        }, "json");
     });
 });
 
