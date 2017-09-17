@@ -52,7 +52,7 @@ namespace Udenad.CLI
             await App.SaveCardAsync(_card);
             var count = await App.GetCountAsync(DateTime.Today);
             Console.WriteLine(
-                $"{count.All} ord i alt, {count.Mature} modne, {count.Unseen} usete, {count.Due} skal oves i dag og {count.Bad} er i dårlig kvalitet.");
+                $"{count.All} ord i alt, {count.Mature} modne, {count.Seen} usete, {count.Due} skal oves i dag og {count.Bad} er i dårlig kvalitet.");
             Console.WriteLine();
             await FrontSideState();
         }

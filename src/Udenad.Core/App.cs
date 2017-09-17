@@ -28,16 +28,13 @@ namespace Udenad.Core
 
         public static async Task<Card> GetNextCardAsync()
         {
-            var due = CardsCollection.FindAsync(c => c.NextDate <= DateTime.Today); // 1. due date
-            var bad = CardsCollection.FindAsync(c => (int) c.Score < 3);            // 2. bad score
-            var unseen = FindRandomOneAsync(c => c.NextDate == null);               // 3. new
+            var due = CardsCollection.FindAsync(c => c.NextDate <= DateTime.Today); // all due date
+            var unseen = FindRandomOneAsync(c => c.NextDate == null);               // and one new
 
-            await Task.WhenAll(due, bad, unseen);
+            await Task.WhenAll(due, unseen);
 
             var cards = (await due.Result.ToListAsync())
-                .Union(await bad.Result.ToListAsync())
-                .Union(unseen.Result == null ?
-                    Enumerable.Empty<Card>() : Enumerable.Repeat(unseen.Result, 1))
+                .Union(unseen.Result == null ? Enumerable.Empty<Card>() : Enumerable.Repeat(unseen.Result, 1))
                 .ToArray();
 
             var card = cards
@@ -96,22 +93,20 @@ namespace Udenad.Core
         {
             // WONTFIX: it is slow but it is ok for now
             var all = CountAsync(c => true);
-            var bad = CountAsync(c => (int)c.Score < 3);
             var due = CountAsync(c => c.NextDate <= DateTime.Today);
             var mature = CountAsync(c => c.NextDate > DateTime.Today.Date.AddDays(21));
-            var unseen = CountAsync(c => c.NextDate == null);
+            var seen = CountAsync(c => c.NextDate != null);
             
-            await Task.WhenAll(all, mature, unseen);
+            await Task.WhenAll(all, mature, seen);
 
             await SaveCountAsync(
                 new Count
                 {
                     Date = DateTime.Today.Date,
                     All = all.Result,
-                    Bad = bad.Result,
                     Due = due.Result,
                     Mature = mature.Result,
-                    Unseen = unseen.Result
+                    Seen = seen.Result
                 });
         }
 

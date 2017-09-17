@@ -47,18 +47,17 @@ namespace Udenad.Core
 
             if ((int) score < 3)
             {
+                Easiness = SmallestEasiness;
+                LastInterval = 0;
+                NextDate = DateTime.Today;
                 Repetitions = 0;
-            }
-            else
-            {
-                Repetitions++;
+                return;
             }
             
+            Repetitions++;
+
             switch (Repetitions)
             {
-                case 0:
-                    LastInterval = 0;
-                    break;
                 case 1:
                     // I(1) := 1
                     LastInterval = 1;

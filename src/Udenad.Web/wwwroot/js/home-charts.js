@@ -20,7 +20,6 @@ d3.json("counts", function(error, data) {
 
     data.forEach(function(d) {
         d.date = new Date(d.date);
-        d.seen = d.all - d.unseen;
     });
 
     x.domain(d3.extent(data, function(d) { return d.date; }));

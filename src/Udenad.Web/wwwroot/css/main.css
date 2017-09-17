@@ -21,3 +21,8 @@ h1 {
     left: 15px;
     position: fixed;
 }
+
+::selection {
+    background: #FF0000;
+    color: #FFFFFF;
+}
