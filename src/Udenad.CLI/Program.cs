@@ -6,7 +6,6 @@ namespace Udenad.CLI
 {
     static class Program
     {
-        private static App _app = new App();
         private static Card _card;
 
         private static void Main() =>
@@ -52,7 +51,7 @@ namespace Udenad.CLI
             await App.SaveCardAsync(_card);
             var count = await App.GetCountAsync(DateTime.Today);
             Console.WriteLine(
-                $"{count.All} ord i alt, {count.Mature} modne, {count.Seen} usete, {count.Due} skal oves i dag og {count.Bad} er i dårlig kvalitet.");
+                $"{count.All} ord i alt, {count.Mature} modne, {count.Seen} set, {count.Due} skal oves i dag.");
             Console.WriteLine();
             await FrontSideState();
         }
