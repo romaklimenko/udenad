@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Linq;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Udenad.Core
 {
     public class Card
     {
-        public const double SmallestEasiness = 1.3;
-        public const int BiggestLastInterval = 365 * 3;
-
-        private double _easiness = SmallestEasiness;
-        private int _lastInterval;
+        private static int[] Fibonacci => new []
+        {
+            0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181
+        };
 
         [BsonId]
         public string Word { get; set; }
@@ -22,62 +22,16 @@ namespace Udenad.Core
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         public DateTime? NextDate { get; protected set; }
 
-        public double Easiness
-        {
-            get => _easiness;
-            private set => _easiness = Math.Max(SmallestEasiness, value);
-        }
-
-        public int LastInterval
-        {
-            get => _lastInterval;
-            private set => _lastInterval = Math.Min(BiggestLastInterval, value);
-        }
-
         public int Repetitions { get; private set; }
-
-        public Score Score { get; private set; }
         
-        public void Review(Score score)
+        public void Review(bool score)
         { 
             if (NextDate != null && DateTime.Today < NextDate)
                 return;
 
-            Score = score;
+            Repetitions = !score ? 0 : Math.Min(Fibonacci.Length - 1, Repetitions + 1);
 
-            if ((int) score < 3)
-            {
-                Easiness = SmallestEasiness;
-                LastInterval = 0;
-                NextDate = DateTime.Today;
-                Repetitions = 0;
-                return;
-            }
-            
-            Repetitions++;
-
-            switch (Repetitions)
-            {
-                case 1:
-                    // I(1) := 1
-                    LastInterval = 1;
-                    break;
-                case 2:
-                    // I(2) := 6
-                    LastInterval = 6;
-                    break;
-                default:
-                    // for n > 2 I(n) := I(n-1) * EF 
-                    LastInterval = (int) Math.Ceiling(LastInterval * Easiness);
-                    break;
-            }
-
-            // EF' := EF - 0.8 + 0.28 * q - 0.02 * q * q
-            Easiness = Math.Max(
-                SmallestEasiness,
-                Easiness - 0.8 + 0.28 * (int) score - 0.02 * (int) score * (int) score);
-
-            NextDate = DateTime.Now.Date.AddDays(LastInterval);
+            NextDate = DateTime.Now.Date.AddDays(Fibonacci[Repetitions]);
         }
     }
 }

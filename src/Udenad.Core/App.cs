@@ -65,6 +65,24 @@ namespace Udenad.Core
         public static async Task<IEnumerable<Count>> GetCountsAsync() =>
             await CountsCollection.Find(c => true).SortBy(c => c.Date).ToListAsync();
 
+        public static async Task<IEnumerable<(DateTime, double)>> GetForecastAsync()
+        {
+            var result = await CardsCollection.Aggregate()
+                .Match(c => c.NextDate != null)
+                .Group(new BsonDocument
+                {
+                    { "_id", "$NextDate" },
+                    { "count", new BsonDocument { { "$sum", 1 } } }
+                })
+                .Sort(new BsonDocument
+                { { "_id", 1 } })
+                .ToListAsync();
+
+            return result
+                .Select(
+                    r => (Date: r["_id"].ToUniversalTime(), Count: r["count"].ToDouble()));
+        }
+
         public static async Task SaveCardAsync(Card card)
         {
             await CardsCollection

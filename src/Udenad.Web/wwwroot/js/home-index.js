@@ -38,7 +38,7 @@ function showBackSide() {
     $("#status-front").attr("hidden", "hidden");
     $("#status-back").removeAttr("hidden");
     $("#backside").removeAttr("hidden");
-    $("#score-3").focus();
+    $("#score-incorrect").focus();
     state = BACK;
 }
 

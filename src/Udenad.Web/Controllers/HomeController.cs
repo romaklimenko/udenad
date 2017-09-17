@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,7 @@ namespace Udenad.Web.Controllers
         }
         
         [HttpPost("score")]
-        public async Task<IActionResult> Score(string word, Score score)
+        public async Task<IActionResult> Score(string word, bool score)
         {
             var card = await App.GetCardAsync(word);
             if (card == null)
@@ -59,5 +60,16 @@ namespace Udenad.Web.Controllers
         [HttpGet("counts")]
         public async Task<JsonResult> Counts() =>
             Json(await App.GetCountsAsync());
+
+        [HttpGet("forecast")]
+        public async Task<JsonResult> Forecast() =>
+            Json((await App.GetForecastAsync())
+                .Select(f => new
+                {
+                    Date = f.Item1,
+                    Count = f.Item2
+                }));
+
+
     }
 }
