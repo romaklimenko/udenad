@@ -10,6 +10,10 @@ h1 {
     font-size: 96px;
 }
 
+.fullscreen {
+    min-height: 100vh;
+}
+
 #status-front, #status-back {
     bottom: 15px;
     right: 15px;
@@ -23,6 +27,6 @@ h1 {
 }
 
 ::selection {
-    background: #FF0000;
+    background: #E31836;
     color: #FFFFFF;
 }

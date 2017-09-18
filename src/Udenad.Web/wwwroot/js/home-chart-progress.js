@@ -28,7 +28,7 @@
 
         g.append("path")
             .datum(data)
-            .attr("fill", "#F00")
+            .attr("fill", "#E31836")
             .attr("d", area);
 
         g.append("g")

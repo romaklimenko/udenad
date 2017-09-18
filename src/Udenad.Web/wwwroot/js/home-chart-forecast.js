@@ -21,15 +21,19 @@
         if (error) throw error;
 
         data.forEach(function(d) {
-            d.date = new Date(d.date);
+            d.date = new Date(d.date).setHours(0,0,0,0);
         });
 
+        if (d3.min(data, function (d) { return d.date }) > new Date().setHours(0,0,0,0)) {
+            data = [{date: new Date().setHours(0,0,0,0), count: 0 }].concat(data);
+        }
+        
         x.domain(d3.extent(data, function(d) { return d.date; }));
         y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
         g.append("path")
             .datum(data)
-            .attr("fill", "#F00")
+            .attr("fill", "#E31836")
             .attr("d", area);
 
         g.append("g")

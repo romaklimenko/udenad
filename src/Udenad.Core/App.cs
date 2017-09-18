@@ -75,7 +75,9 @@ namespace Udenad.Core
                     { "count", new BsonDocument { { "$sum", 1 } } }
                 })
                 .Sort(new BsonDocument
-                { { "_id", 1 } })
+                {
+                    { "_id", 1 }
+                })
                 .ToListAsync();
 
             return result
