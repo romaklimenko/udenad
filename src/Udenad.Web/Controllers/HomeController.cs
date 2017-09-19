@@ -69,7 +69,14 @@ namespace Udenad.Web.Controllers
                     Date = f.Item1,
                     Count = f.Item2
                 }));
-
-
+        
+        [HttpGet("repetitions")]
+        public async Task<JsonResult> Repetitions() =>
+            Json((await App.GetRepetitionsAsync())
+                .Select(f => new
+                {
+                    Repetitions = f.Item1,
+                    Count = f.Item2
+                }));
     }
 }

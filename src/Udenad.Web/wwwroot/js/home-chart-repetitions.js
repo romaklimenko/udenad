@@ -5,28 +5,18 @@
 
     var x = d3.scaleBand().rangeRound([0, width], .05).padding(0.1);
     var y = d3.scaleLinear().range([height, 0]);
-    var xAxis = d3.axisBottom()
-        .scale(x)
-        .tickFormat(d3.timeFormat("%Y-%m-%d"));
+    var xAxis = d3.axisBottom().scale(x);
     var yAxis = d3.axisLeft()
         .scale(y)
         .ticks(10);
-    var svg = d3.select("#chart-forecast")
+    var svg = d3.select("#chart-repetitions")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
-    d3.json("forecast", function(error, data) {
-        data.forEach(function(d) {
-            d.date = new Date(d.date).setHours(0,0,0,0);
-        });
-
-        if (d3.min(data, function (d) { return d.date }) > new Date().setHours(0,0,0,0)) {
-            data = [{date: new Date().setHours(0,0,0,0), count: 0 }].concat(data);
-        }
-        
-        x.domain(data.map(function(d) { return d.date; }));
+    d3.json("repetitions", function(error, data) {
+        x.domain(data.map(function(d) { return d.repetitions; }));
         y.domain([0, d3.max(data, function(d) { return d.count; })]);
         svg.append("g")
             .attr("class", "x axis")
@@ -45,7 +35,7 @@
             .data(data)
             .enter().append("rect")
             .style("fill", "#E31836")
-            .attr("x", function(d) { return x(d.date); })
+            .attr("x", function(d) { return x(d.repetitions); })
             .attr("width", x.bandwidth())
             .attr("y", function(d) { return y(d.count); })
             .attr("height", function(d) { return height - y(d.count); });

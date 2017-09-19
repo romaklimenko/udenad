@@ -84,6 +84,25 @@ namespace Udenad.Core
                 .Select(
                     r => (Date: r["_id"].ToUniversalTime(), Count: r["count"].ToDouble()));
         }
+        
+        public static async Task<IEnumerable<(int, double)>> GetRepetitionsAsync()
+        {
+            var result = await CardsCollection.Aggregate()
+                .Group(new BsonDocument
+                {
+                    { "_id", "$Repetitions" },
+                    { "count", new BsonDocument { { "$sum", 1 } } }
+                })
+                .Sort(new BsonDocument
+                {
+                    { "_id", 1 }
+                })
+                .ToListAsync();
+
+            return result
+                .Select(
+                    r => (Repetitions: r["_id"] == BsonNull.Value ? 0 : r["_id"].ToInt32(), Count: r["count"].ToDouble()));
+        }
 
         public static async Task SaveCardAsync(Card card)
         {
