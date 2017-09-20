@@ -14,7 +14,7 @@ namespace Udenad.Core
             new MongoClient();
 
         private static IMongoDatabase MongoDatabase =>
-            MongoClient.GetDatabase("udenad"); 
+            MongoClient.GetDatabase("udenad");
 
         private static IMongoCollection<Card> CardsCollection =>
             MongoDatabase.GetCollection<Card>("cards");
@@ -84,8 +84,8 @@ namespace Udenad.Core
                 .Select(
                     r => (Date: r["_id"].ToUniversalTime(), Count: r["count"].ToDouble()));
         }
-        
-        public static async Task<IEnumerable<(int, double)>> GetRepetitionsAsync()
+
+        public static async Task<IEnumerable<(int?, double)>> GetRepetitionsAsync()
         {
             var result = await CardsCollection.Aggregate()
                 .Group(new BsonDocument
@@ -101,7 +101,7 @@ namespace Udenad.Core
 
             return result
                 .Select(
-                    r => (Repetitions: r["_id"] == BsonNull.Value ? 0 : r["_id"].ToInt32(), Count: r["count"].ToDouble()));
+                    r => (Repetitions: r["_id"] == BsonNull.Value ? null : (int?)r["_id"].ToInt32(), Count: r["count"].ToDouble()));
         }
 
         public static async Task SaveCardAsync(Card card)
@@ -135,7 +135,7 @@ namespace Udenad.Core
             var due = CountAsync(c => c.NextDate <= DateTime.Today);
             var mature = CountAsync(c => c.NextDate > DateTime.Today.Date.AddDays(21));
             var seen = CountAsync(c => c.NextDate != null);
-            
+
             await Task.WhenAll(all, mature, seen);
 
             await SaveCountAsync(

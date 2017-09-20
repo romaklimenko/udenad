@@ -39,7 +39,7 @@ namespace Udenad.Web.Controllers
 
             return Ok(card);
         }
-        
+
         [HttpPost("score")]
         public async Task<IActionResult> Score(string word, bool score)
         {
@@ -50,13 +50,13 @@ namespace Udenad.Web.Controllers
             card.Review(score);
 
             await App.SaveCardAsync(card);
-            
+
             return Ok();
         }
 
         [HttpGet("charts")]
         public IActionResult Charts() => View();
-        
+
         [HttpGet("counts")]
         public async Task<JsonResult> Counts() =>
             Json(await App.GetCountsAsync());
@@ -69,7 +69,7 @@ namespace Udenad.Web.Controllers
                     Date = f.Item1,
                     Count = f.Item2
                 }));
-        
+
         [HttpGet("repetitions")]
         public async Task<JsonResult> Repetitions() =>
             Json((await App.GetRepetitionsAsync())
