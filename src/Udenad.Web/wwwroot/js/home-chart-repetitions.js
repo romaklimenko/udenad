@@ -38,7 +38,17 @@
             .attr("x", function(d) { return x(d.repetitions); })
             .attr("width", x.bandwidth())
             .attr("y", function(d) { return y(d.count); })
-            .attr("height", function(d) { return height - y(d.count); });
+            .attr("height", function(d) { return height - y(d.count); })
+
+        svg.selectAll("bar")
+            .data(data)
+            .enter().append("text")
+            .attr("x", function(d) { return x(d.repetitions) + x.bandwidth() / 2; })
+            .attr("y", function(d) { return y(d.count) - 5; })
+            .attr("text-anchor", "middle")
+            .attr("width", x.bandwidth())
+            .attr("font-size", "12")
+            .text(function(d){ return d.count; });
     });
 })();
 

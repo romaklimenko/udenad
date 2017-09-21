@@ -25,7 +25,7 @@
         if (d3.min(data, function (d) { return d.date }) > new Date().setHours(0,0,0,0)) {
             data = [{date: new Date().setHours(0,0,0,0), count: 0 }].concat(data);
         }
-        
+
         x.domain(data.map(function(d) { return d.date; }));
         y.domain([0, d3.max(data, function(d) { return d.count; })]);
         svg.append("g")
@@ -49,6 +49,15 @@
             .attr("width", x.bandwidth())
             .attr("y", function(d) { return y(d.count); })
             .attr("height", function(d) { return height - y(d.count); });
+        svg.selectAll("bar")
+            .data(data)
+            .enter().append("text")
+            .attr("x", function(d) { return x(d.date) + x.bandwidth() / 2; })
+            .attr("y", function(d) { return y(d.count) - 5; })
+            .attr("text-anchor", "middle")
+            .attr("width", x.bandwidth())
+            .attr("font-size", "12")
+            .text(function(d){ return d.count; });
     });
 })();
 
