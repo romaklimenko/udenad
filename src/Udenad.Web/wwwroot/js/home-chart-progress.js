@@ -19,8 +19,10 @@ charts.progress = {
             .y0(function(d) { return y(d.mature); })
             .y1(function(d) { return y(d.seen); });
 
-        d3.json(url, function(error, data) {
+        d3.text(url, function(error, data) {
             if (error) throw error;
+
+            data = JSON.parse(data);
 
             data.forEach(function(d) {
                 d.date = new Date(d.date);
