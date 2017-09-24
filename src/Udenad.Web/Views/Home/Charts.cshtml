@@ -19,4 +19,9 @@
     <script type="text/javascript" src="~/js/home-chart-progress.js"></script>
     <script type="text/javascript" src="~/js/home-chart-forecast.js"></script>
     <script type="text/javascript" src="~/js/home-chart-repetitions.js"></script>
+    <script>
+        charts.progress.render("counts", "#chart-progress");
+        charts.forecast.render("forecast", "#chart-forecast");
+        charts.repetitions.render("repetitions", "#chart-repetitions");
+    </script>
 }
