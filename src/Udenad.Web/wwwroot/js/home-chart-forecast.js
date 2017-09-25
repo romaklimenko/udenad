@@ -22,12 +22,33 @@ charts.forecast = {
                 "translate(" + margin.left + "," + margin.top + ")");
         d3.json(url, function(error, data) {
             data.forEach(function(d) {
-                d.date = new Date(d.date).setHours(0,0,0,0);
+                var date = new Date(d.date);
+                date.setHours(0,0,0,0)
+                d.date = date;
             });
 
-            if (d3.min(data, function (d) { return d.date }) > new Date().setHours(0,0,0,0)) {
-                data = [{date: new Date().setHours(0,0,0,0), count: 0 }].concat(data);
+            var today = new Date().setHours(0,0,0,0);
+
+            if (d3.min(data, function (d) { return d.date }) > today) {
+                data = [{date: today, count: 0 }].concat(data);
             }
+
+            var extent = d3.extent(data.map(function(d) { return d.date; }));
+
+            var range = d3.timeDays(extent[0], new Date(extent[1]).setDate(extent[1].getDate() + 1));
+
+            data = range.map(function(d) {
+                for (var index = 0; index < data.length; index++) {
+                    var element = data[index];
+                    if (element.date.toString() == d.toString()) {
+                        return element;
+                    }
+                }
+                return {
+                    date: d,
+                    count: 0
+                };
+            });
 
             x.domain(data.map(function(d) { return d.date; }));
             y.domain([0, d3.max(data, function(d) { return d.count; })]);
