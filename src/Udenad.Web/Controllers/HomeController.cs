@@ -1,16 +1,23 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Udenad.Core;
 
 namespace Udenad.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
+        private readonly IHostingEnvironment _hostingEnvironment;
+
+        public HomeController(IHostingEnvironment hostingEnvironment)
         {
+            _hostingEnvironment = hostingEnvironment;
             App.SaveCountsAsync().GetAwaiter().GetResult();
         }
 
@@ -58,8 +65,21 @@ namespace Udenad.Web.Controllers
         public IActionResult Charts() => View();
 
         [HttpGet("counts")]
-        public async Task<JsonResult> Counts() =>
-            Json(await App.GetCountsAsync());
+        public async Task<JsonResult> Counts()
+        {
+            var result = Json(await App.GetCountsAsync());
+            var path = Path.Combine(
+                _hostingEnvironment.WebRootPath,
+                "data", "counts.json");
+            var serializerSettings = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            System.IO.File.WriteAllText(
+                path, JsonConvert.SerializeObject(result.Value, serializerSettings));
+
+            return result;
+        }
 
         [HttpGet("forecast")]
         public async Task<JsonResult> Forecast() =>
