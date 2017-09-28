@@ -73,7 +73,8 @@ namespace Udenad.Web.Controllers
                 "data", "counts.json");
             var serializerSettings = new JsonSerializerSettings()
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.Indented
             };
             System.IO.File.WriteAllText(
                 path, JsonConvert.SerializeObject(result.Value, serializerSettings));
