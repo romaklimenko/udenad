@@ -34,7 +34,7 @@ charts.progress = {
             // area path
             g.append("path")
                 .datum(data)
-                .attr("fill", "red")
+                .attr("fill", "#E31836")
                 .attr("d", area);
 
             // bottom axis (x)

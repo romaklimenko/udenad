@@ -68,7 +68,7 @@ charts.forecast = {
             svg.selectAll("bar")
                 .data(data)
                 .enter().append("rect")
-                .style("fill", "red")
+                .style("fill", "#E31836")
                 .attr("x", function (d) { return x(d.date); })
                 .attr("width", x.bandwidth())
                 .attr("y", function (d) { return y(d.count); })
