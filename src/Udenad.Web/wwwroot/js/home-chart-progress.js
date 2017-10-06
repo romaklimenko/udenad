@@ -90,7 +90,7 @@ charts.progress = {
                 .attr("y", margin.top + 45)
                 .attr("font-size", "9pt")
                 .text(
-                "Young cards trend: y = "
+                "Mature cards trend: y = "
                 + Math.round(mature_regression.intercept) + " + "
                 + Math.round(mature_regression.slope) + "x; "
                 + "r² = " + Math.round(mature_regression.r2 * 100) / 100);
