@@ -6,7 +6,8 @@ charts.progress = {
             margin = { top: 20, right: 20, bottom: 30, left: 50 },
             width = +svg.attr("width") - margin.left - margin.right,
             height = +svg.attr("height") - margin.top - margin.bottom,
-            g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            g = svg.append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         var x = d3.scaleTime()
             .rangeRound([0, width]);
@@ -32,6 +33,9 @@ charts.progress = {
             });
 
             // y = a + bx
+            // y = intercept + slope * x
+
+            // all = intercept + slope * x
 
             var seen_regression = linearRegression(
                 data.map(function (d) { return d.seen; }),
@@ -42,8 +46,26 @@ charts.progress = {
                 data.map(function (d) { return d.shift; }));
 
             x.domain(d3.extent(data, function (d) { return d.date; }));
-            //x.domain([data[0].date, new Date(data[0].date).setDate(data[0].date.getDate() - data[0].all / regression.slope)]);
+            //x.domain([data[0].date, new Date(data[0].date).setDate(data[0].date.getDate() + data[0].all / seen_regression.slope)]);
             y.domain([0, d3.max(data, function (d) { return d.all; })]);
+
+            var diffDays = Math.ceil(Math.abs(x.domain()[0].getTime() - x.domain()[1].getTime()) / (1000 * 3600 * 24));
+
+            g.append("line")
+                .attr("stroke", "#E31836")
+                .attr("stroke-dasharray", "5, 5")
+                .attr("x1", 0)
+                .attr("y1", y(seen_regression.intercept))
+                .attr("x2", width)
+                .attr("y2", y(seen_regression.intercept + seen_regression.slope * diffDays));
+
+            g.append("line")
+                .attr("stroke", "#E31836")
+                .attr("stroke-dasharray", "5, 5")
+                .attr("x1", 0)
+                .attr("y1", y(mature_regression.intercept))
+                .attr("x2", width)
+                .attr("y2", y(mature_regression.intercept + mature_regression.slope * diffDays));
 
             // area path
             g.append("path")

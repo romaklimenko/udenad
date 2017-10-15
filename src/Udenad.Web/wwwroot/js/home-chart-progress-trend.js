@@ -45,7 +45,7 @@ charts.progressTrend = {
                 data.map(function (d) { return d.mature; }),
                 data.map(function (d) { return d.shift; }));
 
-            x.domain(d3.extent(data, function (d) { return d.date; }));
+            //x.domain(d3.extent(data, function (d) { return d.date; }));
             x.domain([data[0].date, new Date(data[0].date).setDate(data[0].date.getDate() + data[0].all / seen_regression.slope)]);
             y.domain([0, d3.max(data, function (d) { return d.all; })]);
 
