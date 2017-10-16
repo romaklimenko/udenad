@@ -133,7 +133,7 @@ namespace Udenad.Core
             // WONTFIX: it is slow but it is ok for now
             var all = CountAsync(c => true);
             var due = CountAsync(c => c.NextDate <= DateTime.Today);
-            var mature = CountAsync(c => c.NextDate > DateTime.Today.Date.AddDays(21));
+            var mature = CountAsync(c => c.Repetitions > 6);
             var seen = CountAsync(c => c.NextDate != null);
 
             await Task.WhenAll(all, mature, seen);
