@@ -2,7 +2,7 @@ var charts = charts || {};
 
 charts.forecast = {
     render: function (url, selector) {
-        var margin = { top: 20, right: 20, bottom: 70, left: 50 },
+        var margin = { top: 20, right: 20, bottom: 80, left: 50 },
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
@@ -10,7 +10,7 @@ charts.forecast = {
         var y = d3.scaleLinear().range([height, 0]);
         var xAxis = d3.axisBottom()
             .scale(x)
-            .tickFormat(d3.timeFormat("%Y-%m-%d"));
+            .tickFormat(d3.timeFormat("%Y-%m-%d %a"));
         var yAxis = d3.axisLeft()
             .scale(y)
             .ticks(10);
