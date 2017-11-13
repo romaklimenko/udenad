@@ -30,7 +30,7 @@ charts.forecast = {
             var today = new Date().setHours(0, 0, 0, 0);
 
             if (d3.min(data, function (d) { return d.date }) > today) {
-                data = [{ date: today, count: 0 }].concat(data);
+                data = [{ date: today, young: 0, almostMature: 0, mature: 0 }].concat(data);
             }
 
             var extent = d3.extent(data.map(function (d) { return d.date; }));
@@ -46,12 +46,14 @@ charts.forecast = {
                 }
                 return {
                     date: d,
-                    count: 0
+                    young: 0,
+                    almostMature: 0,
+                    mature: 0
                 };
             });
 
             x.domain(data.map(function (d) { return d.date; }));
-            y.domain([0, d3.max(data, function (d) { return d.count; })]);
+            y.domain([0, d3.max(data, function (d) { return d.young + d.almostMature + d.mature; })]);
             svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
@@ -71,17 +73,17 @@ charts.forecast = {
                 .style("fill", "#E31836")
                 .attr("x", function (d) { return x(d.date); })
                 .attr("width", x.bandwidth())
-                .attr("y", function (d) { return y(d.count); })
-                .attr("height", function (d) { return height - y(d.count); });
+                .attr("y", function (d) { return y(d.young + d.almostMature + d.mature); })
+                .attr("height", function (d) { return height - y(d.young + d.almostMature + d.mature); });
             svg.selectAll("bar")
                 .data(data)
                 .enter().append("text")
                 .attr("x", function (d) { return x(d.date) + x.bandwidth() / 2; })
-                .attr("y", function (d) { return y(d.count) - 5; })
+                .attr("y", function (d) { return y(d.young + d.almostMature + d.mature) - 5; })
                 .attr("text-anchor", "middle")
                 .attr("width", x.bandwidth())
                 .attr("font-size", "12")
-                .text(function (d) { return d.count; });
+                .text(function (d) { return d.young + d.almostMature + d.mature; });
         });
     }
 };
