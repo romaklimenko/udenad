@@ -65,79 +65,24 @@ namespace Udenad.Core
         public static async Task<IEnumerable<Count>> GetCountsAsync() =>
             await CountsCollection.Find(c => true).SortBy(c => c.Date).ToListAsync();
 
-        public static async Task<IEnumerable<(DateTime, double, double, double)>> GetForecastAsync()
+        public static async Task<IEnumerable<(DateTime, double)>> GetForecastAsync()
         {
-            var young = (await CardsCollection.Aggregate()
-                .Match(c => c.NextDate != null && c.Repetitions < 6)
+            var result = await CardsCollection.Aggregate()
+                .Match(c => c.NextDate != null)
                 .Group(new BsonDocument
                 {
                     { "_id", "$NextDate" },
-                    { "young", new BsonDocument { { "$sum", 1 } } }
+                    { "count", new BsonDocument { { "$sum", 1 } } }
                 })
                 .Sort(new BsonDocument
                 {
                     { "_id", 1 }
                 })
-                .ToListAsync())
+                .ToListAsync();
+
+            return result
                 .Select(
-                    r => (Date: r["_id"].ToUniversalTime(), Young: r["young"].ToDouble()))
-                .ToDictionary(c => c.Date);
-
-            var almostMature = (await CardsCollection.Aggregate()
-                .Match(c => c.NextDate != null && c.Repetitions == 6)
-                .Group(new BsonDocument
-                {
-                    { "_id", "$NextDate" },
-                    { "almost_mature", new BsonDocument { { "$sum", 1 } } }
-                })
-                .Sort(new BsonDocument
-                {
-                    { "_id", 1 }
-                })
-                .ToListAsync())
-                .Select(
-                    r => (Date: r["_id"].ToUniversalTime(), AlmostMature: r["almost_mature"].ToDouble()))
-                .ToDictionary(c => c.Date);
-
-            var mature = (await CardsCollection.Aggregate()
-                .Match(c => c.NextDate != null && c.Repetitions > 6)
-                .Group(new BsonDocument
-                {
-                    { "_id", "$NextDate" },
-                    { "mature", new BsonDocument { { "$sum", 1 } } }
-                })
-                .Sort(new BsonDocument
-                {
-                    { "_id", 1 }
-                })
-                .ToListAsync())
-                .Select(
-                    r => (Date: r["_id"].ToUniversalTime(), Mature: r["mature"].ToDouble()))
-                .ToDictionary(c => c.Date);
-
-            var dates = young.Union(almostMature).Union(mature)
-                .Select(d => d.Key)
-                .OrderBy(d => d)
-                .Distinct();
-
-            var result = new List<(DateTime, double, double, double)>();
-
-            foreach(var date in dates)
-            {
-                young.TryGetValue(date, out (DateTime, double) _young);
-                almostMature.TryGetValue(date, out (DateTime, double) _almostMature);
-                mature.TryGetValue(date, out (DateTime, double) _mature);
-
-                result.Add(
-                    (
-                        date,
-                        _young.Item2,
-                        _almostMature.Item2,
-                        _mature.Item2
-                    ));
-            }
-
-            return result;
+                    r => (Date: r["_id"].ToUniversalTime(), Count: r["count"].ToDouble()));
         }
 
         public static async Task<IEnumerable<(int?, double)>> GetRepetitionsAsync()

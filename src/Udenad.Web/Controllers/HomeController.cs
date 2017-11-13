@@ -88,9 +88,7 @@ namespace Udenad.Web.Controllers
                 .Select(f => new
                 {
                     Date = f.Item1,
-                    Young = f.Item2,
-                    AlmostMature = f.Item3,
-                    Mature = f.Item4
+                    Count = f.Item2
                 }));
 
         [HttpGet("repetitions")]
