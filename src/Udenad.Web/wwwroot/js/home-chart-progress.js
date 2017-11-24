@@ -51,21 +51,21 @@ charts.progress = {
 
             var diffDays = Math.ceil(Math.abs(x.domain()[0].getTime() - x.domain()[1].getTime()) / (1000 * 3600 * 24));
 
-            // g.append("line")
-            //     .attr("stroke", "#E31836")
-            //     .attr("stroke-dasharray", "5, 5")
-            //     .attr("x1", 0)
-            //     .attr("y1", y(seen_regression.intercept))
-            //     .attr("x2", width)
-            //     .attr("y2", y(seen_regression.intercept + seen_regression.slope * diffDays));
+            g.append("line")
+                .attr("stroke", "#E31836")
+                .attr("stroke-dasharray", "5, 5")
+                .attr("x1", 0)
+                .attr("y1", y(seen_regression.intercept))
+                .attr("x2", width)
+                .attr("y2", y(seen_regression.intercept + seen_regression.slope * diffDays));
 
-            // g.append("line")
-            //     .attr("stroke", "#E31836")
-            //     .attr("stroke-dasharray", "5, 5")
-            //     .attr("x1", 0)
-            //     .attr("y1", y(mature_regression.intercept))
-            //     .attr("x2", width)
-            //     .attr("y2", y(mature_regression.intercept + mature_regression.slope * diffDays));
+            g.append("line")
+                .attr("stroke", "#E31836")
+                .attr("stroke-dasharray", "5, 5")
+                .attr("x1", 0)
+                .attr("y1", y(mature_regression.intercept))
+                .attr("x2", width)
+                .attr("y2", y(mature_regression.intercept + mature_regression.slope * diffDays));
 
             // area path
             g.append("path")
