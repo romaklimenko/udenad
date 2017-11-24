@@ -11,6 +11,10 @@
 </div>
 
 <div class="row justify-content-md-center fullscreen">
+    <svg width="960" height="500" id="chart-progress-trend-1"></svg>
+</div>
+
+<div class="row justify-content-md-center fullscreen">
     <svg width="960" height="500" id="chart-forecast"></svg>
 </div>
 
@@ -22,11 +26,13 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script type="text/javascript" src="~/js/home-chart-progress.js"></script>
     <script type="text/javascript" src="~/js/home-chart-progress-trend.js"></script>
+    <script type="text/javascript" src="~/js/home-chart-progress-trend-1.js"></script>
     <script type="text/javascript" src="~/js/home-chart-forecast.js"></script>
     <script type="text/javascript" src="~/js/home-chart-repetitions.js"></script>
     <script>
         charts.progress.render("counts", "#chart-progress");
         charts.progressTrend.render("counts", "#chart-progress-trend");
+        charts.progressTrend1.render("counts", "#chart-progress-trend-1");
         charts.forecast.render("forecast", "#chart-forecast");
         charts.repetitions.render("repetitions", "#chart-repetitions");
     </script>
