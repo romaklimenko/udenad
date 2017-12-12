@@ -3,14 +3,6 @@
 }
 
 <div class="row justify-content-md-center fullscreen">
-    <svg width="960" height="500" id="chart-progress"></svg>
-</div>
-
-<div class="row justify-content-md-center fullscreen">
-    <svg width="960" height="500" id="chart-progress-trend"></svg>
-</div>
-
-<div class="row justify-content-md-center fullscreen">
     <svg width="960" height="500" id="chart-progress-trend-1"></svg>
 </div>
 
@@ -30,8 +22,6 @@
     <script type="text/javascript" src="~/js/home-chart-forecast.js"></script>
     <script type="text/javascript" src="~/js/home-chart-repetitions.js"></script>
     <script>
-        charts.progress.render("counts", "#chart-progress");
-        charts.progressTrend.render("counts", "#chart-progress-trend");
         charts.progressTrend1.render("counts", "#chart-progress-trend-1");
         charts.forecast.render("forecast", "#chart-forecast");
         charts.repetitions.render("repetitions", "#chart-repetitions");
