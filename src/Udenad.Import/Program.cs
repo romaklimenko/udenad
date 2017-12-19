@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Udenad.Core;
 
@@ -32,10 +33,42 @@ namespace Udenad.Import
 
         private static async Task MainAsync()
         {
-            // WARNING: Both method are provided for demonstration only purpose.
+            // WARNING: These methods are provided for demonstration only purpose.
             // Before fetching data from public services, check if copyrights and other terms allow that.
-            await FetchWordsAsync();
-            await FetchWordDefinitionsAsync();
+            //await FetchWordsAsync();
+            //await FetchWordDefinitionsAsync();
+            await FetchAudioUrlsAsync();
+        }
+
+        private static async Task FetchAudioUrlsAsync()
+        {
+            IAsyncCursor<Card> cursor = await CardsCollection
+                .FindAsync(x => x.Audio == null);
+            while (cursor.MoveNext())
+            {
+               foreach (var word in cursor.Current
+                   .Select(w => w.Word)
+                   .AsParallel())
+               {
+                    var doc = new HtmlWeb()
+                        .Load($"http://ordnet.dk/ddo/ordbog?query={word}");
+
+                    var nodes = doc.DocumentNode.SelectNodes("//a");
+
+                    foreach(var node in nodes.Where(n => n != null && n.Attributes["href"] != null))
+                    {
+                        var href = node.Attributes["href"].Value;
+                        if(href.EndsWith(".mp3", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            Console.WriteLine(word);
+                            FilterDefinition<Card> filter = Builders<Card>.Filter.Eq("_id", word);
+                            UpdateDefinition<Card> update = Builders<Card>.Update.Set("Audio", href);
+                            await CardsCollection.UpdateOneAsync(filter, update);
+                            break;
+                        }
+                    }
+               }
+            }
         }
 
         private static async Task FetchWordDefinitionsAsync()

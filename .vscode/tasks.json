@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/Udenad.Import/Udenad.Import.csproj"
+                "${workspaceRoot}/src/Udenad.Import/Udenad.Import.csproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"

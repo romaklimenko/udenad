@@ -7,6 +7,12 @@
 <div class="row justify-content-md-center">
     <div>
         <h1 id="word">@(Model.Item1.Word)</h1>
+
+        @if(!string.IsNullOrEmpty(Model.Item1.Audio))
+        {
+            <audio src="@Model.Item1.Audio" autoplay="true" controls="true"></audio>
+        }
+
         <div class="word-class">
             <i>@(Model.Item1.WordClass)</i>
         </div>

@@ -40,6 +40,9 @@ namespace Udenad.Core
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         public DateTime? NextDate { get; protected set; }
 
+        [BsonIgnoreIfNull]
+        public string Audio { get; set; }
+
         public int Repetitions { get; private set; }
 
         public void Review(bool score)
