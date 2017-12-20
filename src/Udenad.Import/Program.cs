@@ -46,27 +46,29 @@ namespace Udenad.Import
                 .FindAsync(x => x.Audio == null);
             while (cursor.MoveNext())
             {
-               foreach (var word in cursor.Current
+               foreach (string word in cursor.Current
                    .Select(w => w.Word)
                    .AsParallel())
                {
-                    var doc = new HtmlWeb()
+                    HtmlDocument doc = new HtmlWeb()
                         .Load($"http://ordnet.dk/ddo/ordbog?query={word}");
 
-                    var nodes = doc.DocumentNode.SelectNodes("//a");
+                    HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//a");
 
-                    foreach(var node in nodes.Where(n => n != null && n.Attributes["href"] != null))
+                    string href = string.Empty;
+
+                    foreach(HtmlNode node in nodes.Where(n => n != null && n.Attributes["href"] != null))
                     {
-                        var href = node.Attributes["href"].Value;
-                        if(href.EndsWith(".mp3", StringComparison.InvariantCultureIgnoreCase))
+                        if(node.Attributes["href"].Value.EndsWith(".mp3", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            Console.WriteLine(word);
-                            FilterDefinition<Card> filter = Builders<Card>.Filter.Eq("_id", word);
-                            UpdateDefinition<Card> update = Builders<Card>.Update.Set("Audio", href);
-                            await CardsCollection.UpdateOneAsync(filter, update);
+                            href = node.Attributes["href"].Value;
                             break;
                         }
                     }
+                    FilterDefinition<Card> filter = Builders<Card>.Filter.Eq("_id", word);
+                    UpdateDefinition<Card> update = Builders<Card>.Update.Set("Audio", href);
+                    await CardsCollection.UpdateOneAsync(filter, update);
+                    Console.WriteLine($"Word: {word}\t\t\tAudio: {href}");
                }
             }
         }
