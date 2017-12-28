@@ -95,9 +95,9 @@ charts.progressTrend1 = {
                 .attr("y", margin.top)
                 .attr("font-size", "9pt")
                 .text("Seen cards trend: y = "
-                + Math.round(seen_regression.intercept) + " + "
-                + Math.round(seen_regression.slope) + "x; "
-                + "r² = " + Math.round(seen_regression.r2 * 100) / 100);
+                + Math.round(seen_regression.intercept * 1000) / 1000 + " + "
+                + Math.round(seen_regression.slope * 1000) / 1000 + "x; "
+                + "r² = " + Math.round(seen_regression.r2 * 1000) / 1000);
 
             g.append("text")
                 .attr("fill", "#000")
@@ -114,9 +114,9 @@ charts.progressTrend1 = {
                 .attr("font-size", "9pt")
                 .text(
                 "Mature cards trend: y = "
-                + Math.round(mature_regression.intercept) + " + "
-                + Math.round(mature_regression.slope) + "x; "
-                + "r² = " + Math.round(mature_regression.r2 * 100) / 100);
+                + Math.round(mature_regression.intercept * 1000) / 1000 + " + "
+                + Math.round(mature_regression.slope * 1000) / 1000 + "x; "
+                + "r² = " + Math.round(mature_regression.r2 * 1000) / 1000);
 
             g.append("text")
                 .attr("fill", "#000")
