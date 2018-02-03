@@ -3,7 +3,7 @@ var charts = charts || {};
 charts.forecast = {
     render: function (url, selector) {
         var margin = { top: 20, right: 20, bottom: 80, left: 50 },
-            width = 960 - margin.left - margin.right,
+            width = 1200 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
         var x = d3.scaleBand().rangeRound([0, width], .05).padding(0.1);
@@ -58,6 +58,7 @@ charts.forecast = {
                 .call(xAxis)
                 .selectAll("text")
                 .style("text-anchor", "end")
+                .attr("font-size", "8")
                 .attr("dx", "-.8em")
                 .attr("dy", "-.55em")
                 .attr("transform", "rotate(-90)");
@@ -80,7 +81,7 @@ charts.forecast = {
                 .attr("y", function (d) { return y(d.count) - 5; })
                 .attr("text-anchor", "middle")
                 .attr("width", x.bandwidth())
-                .attr("font-size", "12")
+                .attr("font-size", "8")
                 .text(function (d) { return d.count; });
         });
     }
