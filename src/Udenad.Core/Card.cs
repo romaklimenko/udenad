@@ -38,7 +38,7 @@ namespace Udenad.Core
         public string Notes { get; set; }
 
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
-        public DateTime? NextDate { get; protected set; }
+        public DateTime? NextDate { get; set; }
 
         [BsonIgnoreIfNull]
         public string Audio { get; set; }

@@ -25,6 +25,8 @@ namespace Udenad.Web.Controllers
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Index()
         {
+            Thread.Sleep(250);
+
             var card = App.GetNextCardAsync();
             var count = App.GetCountAsync(DateTime.Today);
 
