@@ -90,7 +90,8 @@ namespace Udenad.Web.Controllers
                 .Select(f => new
                 {
                     Date = f.Item1,
-                    Count = f.Item2
+                    Count = f.Item2,
+                    Average = f.Item3
                 }));
 
         [HttpGet("repetitions")]

@@ -30,7 +30,7 @@ charts.forecast = {
             var today = new Date().setHours(0, 0, 0, 0);
 
             if (d3.min(data, function (d) { return d.date }) > today) {
-                data = [{ date: today, count: 0 }].concat(data);
+                data = [{ date: today, count: 0, average: 0 }].concat(data);
             }
 
             var extent = d3.extent(data.map(function (d) { return d.date; }));
@@ -46,9 +46,12 @@ charts.forecast = {
                 }
                 return {
                     date: d,
-                    count: 0
+                    count: 0,
+                    average: 0
                 };
             });
+
+            var maxAverage = d3.max(data, function(d) { return d.average } );
 
             x.domain(data.map(function (d) { return d.date; }));
             y.domain([0, d3.max(data, function (d) { return d.count; })]);
@@ -70,10 +73,12 @@ charts.forecast = {
                 .data(data)
                 .enter().append("rect")
                 .style("fill", "#E31836")
+                .style("opacity", function (d) { return d.average / maxAverage; })
                 .attr("x", function (d) { return x(d.date); })
-                .attr("width", x.bandwidth())
+                .attr("width", function(d) { return x.bandwidth() * d.average / maxAverage; })
                 .attr("y", function (d) { return y(d.count); })
-                .attr("height", function (d) { return height - y(d.count); });
+                .attr("height", function (d) { return height - y(d.count); })
+                .append("title").text(function(d) { return Math.round(d.average); });
             svg.selectAll("bar")
                 .data(data)
                 .enter().append("text")

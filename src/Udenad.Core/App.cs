@@ -65,14 +65,15 @@ namespace Udenad.Core
         public static async Task<IEnumerable<Count>> GetCountsAsync() =>
             await CountsCollection.Find(c => true).SortBy(c => c.Date).ToListAsync();
 
-        public static async Task<IEnumerable<(DateTime, double)>> GetForecastAsync()
+        public static async Task<IEnumerable<(DateTime, double, double)>> GetForecastAsync()
         {
             var result = await CardsCollection.Aggregate()
                 .Match(c => c.NextDate != null)
                 .Group(new BsonDocument
                 {
                     { "_id", "$NextDate" },
-                    { "count", new BsonDocument { { "$sum", 1 } } }
+                    { "count", new BsonDocument { { "$sum", 1 } } },
+                    { "average", new BsonDocument { { "$avg", "$Repetitions" } } }
                 })
                 .Sort(new BsonDocument
                 {
@@ -81,8 +82,13 @@ namespace Udenad.Core
                 .ToListAsync();
 
             return result
-                .Select(
-                    r => (Date: r["_id"].ToUniversalTime(), Count: r["count"].ToDouble()));
+                .Select(r =>
+                    (
+                        Date: r["_id"].ToUniversalTime(),
+                        Count: r["count"].ToDouble(),
+                        Average: r["average"].ToDouble()
+                    )
+                );
         }
 
         public static async Task<IEnumerable<(int?, double)>> GetRepetitionsAsync()
