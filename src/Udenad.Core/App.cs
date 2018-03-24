@@ -108,7 +108,7 @@ namespace Udenad.Core
         {
             while ( card.NextDate != null &&
                     card.Repetitions > 0 &&
-                    await CardsCollection.CountAsync(c => c.NextDate == card.NextDate) >= 99) // maximum cards in a day
+                    await CardsCollection.CountAsync(c => c.NextDate == card.NextDate) >= 50) // maximum cards in a day
             {
                 card.NextDate = card.NextDate?.AddDays(1);
             }
