@@ -78,7 +78,8 @@ charts.forecast = {
                 .attr("width", function(d) { return x.bandwidth() * d.average / maxAverage; })
                 .attr("y", function (d) { return y(d.count); })
                 .attr("height", function (d) { return height - y(d.count); })
-                .append("title").text(function(d) { return Math.round(d.average); });
+                .append("title")
+                .text(function(d) { return Math.round(d.average * 10) / 10; });
             svg.selectAll("bar")
                 .data(data)
                 .enter().append("text")
