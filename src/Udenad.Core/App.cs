@@ -33,7 +33,7 @@ namespace Udenad.Core
 
             await Task.WhenAll(due, unseen);
 
-            var cards = (await due.Result.ToListAsync())
+            var cards = due.Result.ToList()
                 .Union(unseen.Result == null ? Enumerable.Empty<Card>() : Enumerable.Repeat(unseen.Result, 1))
                 .ToArray();
 
@@ -114,7 +114,9 @@ namespace Udenad.Core
         {
             while ( card.NextDate != null &&
                     card.Repetitions > 0 &&
-                    await CardsCollection.CountAsync(c => c.NextDate == card.NextDate) >= 50) // maximum cards in a day
+                    await CardsCollection.CountAsync(
+                        // maximum new cards in a day
+                        c => c.NextDate == card.NextDate && c.Repetitions < 7) >= 50)
             {
                 card.NextDate = card.NextDate?.AddDays(1);
             }
@@ -149,7 +151,7 @@ namespace Udenad.Core
             var mature = CountAsync(c => c.Repetitions > 6);
             var seen = CountAsync(c => c.NextDate != null);
 
-            await Task.WhenAll(all, mature, seen);
+            await Task.WhenAll(all, due, mature, seen);
 
             await SaveCountAsync(
                 new Count
