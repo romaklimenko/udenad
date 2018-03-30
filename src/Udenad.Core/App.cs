@@ -112,10 +112,25 @@ namespace Udenad.Core
 
         public static async Task SaveCardAsync(Card card)
         {
-            while (card.NextDate != null
-                && await CardsCollection.CountAsync(c => c.NextDate == card.NextDate) > 99)
+            if (card.NextDate != null && card.Repetitions != 0)
             {
-                card.NextDate = card.NextDate?.AddDays(1);
+                if (card.Repetitions > 6)
+                {
+                    // we allow more matutes than youngs in a single day
+                    while (await CardsCollection
+                        .CountAsync(c => c.NextDate == card.NextDate && c.Repetitions > 6) > 99)
+                    {
+                        card.NextDate = card.NextDate?.AddDays(1);
+                    }
+                }
+                else
+                {
+                    while (await CardsCollection
+                        .CountAsync(c => c.NextDate == card.NextDate && c.Repetitions < 7) > 50)
+                    {
+                        card.NextDate = card.NextDate?.AddDays(1);
+                    }
+                }
             }
 
             await CardsCollection
