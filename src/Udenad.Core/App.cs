@@ -118,7 +118,7 @@ namespace Udenad.Core
                 {
                     // we allow more matutes than youngs in a single day
                     while (await CardsCollection
-                        .CountAsync(c => c.NextDate == card.NextDate && c.Repetitions > 6) > 99)
+                        .CountAsync(c => c.NextDate == card.NextDate && c.Repetitions > 6) >= 100)
                     {
                         card.NextDate = card.NextDate?.AddDays(1);
                     }
@@ -126,7 +126,7 @@ namespace Udenad.Core
                 else
                 {
                     while (await CardsCollection
-                        .CountAsync(c => c.NextDate == card.NextDate && c.Repetitions < 7) > 50)
+                        .CountAsync(c => c.NextDate == card.NextDate && !(c.Repetitions > 6)) >= 50)
                     {
                         card.NextDate = card.NextDate?.AddDays(1);
                     }
