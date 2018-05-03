@@ -10,7 +10,7 @@ namespace Udenad.Core
         public DateTime Date;
         public long All { get; set; }
         public long Due { get; set; }
-        public long Mature { get; set; }
+        public long Learned { get; set; }
         public long Seen { get; set; }
     }
 }

@@ -26,10 +26,11 @@ charts.repetitions = {
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis)
                 .selectAll("text")
-                .style("text-anchor", "end")
-                .attr("dx", "-.8em")
-                .attr("dy", "-.55em")
-                .attr("transform", "rotate(-90)");
+                .style("text-anchor", "middle")
+                //.attr("dx", "-.8em")
+                //.attr("dy", "-.55em")
+                //.attr("transform", "rotate(-90)")
+                .text((d) => d == '11' ? 'Learned' : d);
             svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis)

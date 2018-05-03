@@ -79,9 +79,16 @@ charts.forecast = {
                 .attr("y", function (d) { return y(d.count); })
                 .attr("height", function (d) { return height - y(d.count); })
                 .append("title")
-                .text(function(d) {
-                    return `count: ${d.count}, average repetitions: ${Math.round(d.average * 10) / 10}`;
-                });
+                .text(function(d) { return Math.round(d.average * 10) / 10; });
+            svg.selectAll("bar")
+                .data(data)
+                .enter().append("text")
+                .attr("x", function (d) { return x(d.date) + x.bandwidth() / 2; })
+                .attr("y", function (d) { return y(d.count) - 5; })
+                .attr("text-anchor", "middle")
+                .attr("width", x.bandwidth())
+                .attr("font-size", "8")
+                .text(function (d) { return d.count; });
         });
     }
 };

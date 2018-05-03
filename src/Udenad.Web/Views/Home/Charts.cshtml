@@ -3,7 +3,7 @@
 }
 
 <div class="row justify-content-md-center fullscreen">
-    <svg width="960" height="500" id="chart-progress-trend-1"></svg>
+    <svg width="960" height="500" id="chart-progress-trend"></svg>
 </div>
 
 <div class="row justify-content-md-center fullscreen">
@@ -18,11 +18,10 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script type="text/javascript" src="~/js/home-chart-progress.js"></script>
     <script type="text/javascript" src="~/js/home-chart-progress-trend.js"></script>
-    <script type="text/javascript" src="~/js/home-chart-progress-trend-1.js"></script>
     <script type="text/javascript" src="~/js/home-chart-forecast.js"></script>
     <script type="text/javascript" src="~/js/home-chart-repetitions.js"></script>
     <script>
-        charts.progressTrend1.render("counts", "#chart-progress-trend-1");
+        charts.progressTrend.render("counts", "#chart-progress-trend");
         charts.forecast.render("forecast", "#chart-forecast");
         charts.repetitions.render("repetitions", "#chart-repetitions");
     </script>

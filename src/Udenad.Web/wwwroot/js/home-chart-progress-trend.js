@@ -16,8 +16,9 @@ charts.progressTrend = {
             .rangeRound([height, 0]);
 
         var area = d3.area()
+            .curve(d3.curveMonotoneX)
             .x(function (d) { return x(d.date); })
-            .y0(function (d) { return y(d.mature); })
+            .y0(function (d) { return y(d.learned); })
             .y1(function (d) { return y(d.seen); });
 
         d3.json(url, function (error, data) {
@@ -41,18 +42,25 @@ charts.progressTrend = {
                 data.map(function (d) { return d.seen; }),
                 data.map(function (d) { return d.shift; }));
 
-            var mature_regression = linearRegression(
-                data.map(function (d) { return d.mature; }),
+            var learned_regression = linearRegression(
+                data.map(function (d) { return d.learned; }),
                 data.map(function (d) { return d.shift; }));
 
             //x.domain(d3.extent(data, function (d) { return d.date; }));
-            x.domain([data[0].date, new Date(data[0].date).setDate(data[0].date.getDate() + data[0].all / seen_regression.slope)]);
-            y.domain([0, d3.max(data, function (d) { return d.all; })]);
+            // x.domain([data[0].date, new Date(data[0].date).setDate(data[0].date.getDate() + data[0].all / seen_regression.slope)]);
+            x.domain([data[0].date, data[data.length - 1].date]);
+            y.domain([0, d3.max(data, function (d) { return d.seen; })]);
 
             var diffDays = Math.ceil(Math.abs(x.domain()[0].getTime() - x.domain()[1].getTime()) / (1000 * 3600 * 24));
 
+            // area path
+            g.append("path")
+                .datum(data)
+                .attr("fill", "#E31836")
+                .attr("d", area);
+
             g.append("line")
-                .attr("stroke", "#E31836")
+                .attr("stroke", "#000")
                 .attr("stroke-dasharray", "5, 5")
                 .attr("x1", 0)
                 .attr("y1", y(seen_regression.intercept))
@@ -60,18 +68,12 @@ charts.progressTrend = {
                 .attr("y2", y(seen_regression.intercept + seen_regression.slope * diffDays));
 
             g.append("line")
-                .attr("stroke", "#E31836")
+                .attr("stroke", "#000")
                 .attr("stroke-dasharray", "5, 5")
                 .attr("x1", 0)
-                .attr("y1", y(mature_regression.intercept))
+                .attr("y1", y(learned_regression.intercept))
                 .attr("x2", width)
-                .attr("y2", y(mature_regression.intercept + mature_regression.slope * diffDays));
-
-            // area path
-            g.append("path")
-                .datum(data)
-                .attr("fill", "#E31836")
-                .attr("d", area);
+                .attr("y2", y(learned_regression.intercept + learned_regression.slope * diffDays));
 
             // bottom axis (x)
             g.append("g")
@@ -94,9 +96,9 @@ charts.progressTrend = {
                 .attr("y", margin.top)
                 .attr("font-size", "9pt")
                 .text("Seen cards trend: y = "
-                + Math.round(seen_regression.intercept) + " + "
-                + Math.round(seen_regression.slope) + "x; "
-                + "r² = " + Math.round(seen_regression.r2 * 100) / 100);
+                + Math.round(seen_regression.intercept * 1000) / 1000 + " + "
+                + Math.round(seen_regression.slope * 1000) / 1000 + "x; "
+                + "r² = " + Math.round(seen_regression.r2 * 1000) / 1000);
 
             g.append("text")
                 .attr("fill", "#000")
@@ -112,18 +114,18 @@ charts.progressTrend = {
                 .attr("y", margin.top + 45)
                 .attr("font-size", "9pt")
                 .text(
-                "Mature cards trend: y = "
-                + Math.round(mature_regression.intercept) + " + "
-                + Math.round(mature_regression.slope) + "x; "
-                + "r² = " + Math.round(mature_regression.r2 * 100) / 100);
+                "Learned cards trend: y = "
+                + Math.round(learned_regression.intercept * 1000) / 1000 + " + "
+                + Math.round(learned_regression.slope * 1000) / 1000 + "x; "
+                + "r² = " + Math.round(learned_regression.r2 * 1000) / 1000);
 
             g.append("text")
                 .attr("fill", "#000")
                 .attr("x", margin.left)
                 .attr("y", margin.top + 60)
                 .attr("font-size", "9pt")
-                .text("Expected date when all cards will be mature: "
-                + new Date(new Date(data[0].date).setDate(data[0].date.getDate() + Math.round((data[data.length - 1].all - mature_regression.intercept) / mature_regression.slope))).toDateString());
+                .text("Expected date when all cards will be learned: "
+                + new Date(new Date(data[0].date).setDate(data[0].date.getDate() + Math.round((data[data.length - 1].all - learned_regression.intercept) / learned_regression.slope))).toDateString());
 
             g.append("text")
                 .attr("fill", "#000")
@@ -144,7 +146,7 @@ charts.progressTrend = {
                 .attr("x", margin.left)
                 .attr("y", margin.top + 120)
                 .attr("font-size", "9pt")
-                .text("Mature cards: " + data[data.length - 1].mature);
+                .text("Learned cards: " + data[data.length - 1].learned);
         });
     }
 };

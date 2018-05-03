@@ -28,7 +28,7 @@ namespace Udenad.Core
 
         public static async Task<Card> GetNextCardAsync()
         {
-            var due = CardsCollection.FindAsync(c => c.NextDate <= DateTime.Today); // all due date
+            var due = CardsCollection.FindAsync(c => c.NextDate <= DateTime.Today && c.Repetitions < 11); // all due date
             var unseen = FindRandomOneAsync(c => c.NextDate == null);               // and one new
 
             await Task.WhenAll(due, unseen);
@@ -68,7 +68,7 @@ namespace Udenad.Core
         public static async Task<IEnumerable<(DateTime, double, double)>> GetForecastAsync()
         {
             var result = await CardsCollection.Aggregate()
-                .Match(c => c.NextDate != null)
+                .Match(c => c.NextDate != null && c.Repetitions < 11)
                 .Group(new BsonDocument
                 {
                     { "_id", "$NextDate" },
@@ -112,27 +112,6 @@ namespace Udenad.Core
 
         public static async Task SaveCardAsync(Card card)
         {
-            if (card.NextDate != null && card.Repetitions != 0)
-            {
-                if (card.Repetitions > 6)
-                {
-                    // we allow more matutes than youngs in a single day
-                    while (await CardsCollection
-                        .CountAsync(c => c.NextDate == card.NextDate && c.Repetitions > 6) >= 100)
-                    {
-                        card.NextDate = card.NextDate?.AddDays(1);
-                    }
-                }
-                else
-                {
-                    while (await CardsCollection
-                        .CountAsync(c => c.NextDate == card.NextDate && !(c.Repetitions > 6)) >= 50)
-                    {
-                        card.NextDate = card.NextDate?.AddDays(1);
-                    }
-                }
-            }
-
             await CardsCollection
                 .ReplaceOneAsync(
                     Builders<Card>.Filter.Eq(nameof(Card.Word), card.Word),
@@ -160,10 +139,10 @@ namespace Udenad.Core
             // WONTFIX: it is slow but it is ok for now
             var all = CountAsync(c => true);
             var due = CountAsync(c => c.NextDate <= DateTime.Today);
-            var mature = CountAsync(c => c.Repetitions > 6);
+            var learned = CountAsync(c => c.Repetitions > 10);
             var seen = CountAsync(c => c.NextDate != null);
 
-            await Task.WhenAll(all, due, mature, seen);
+            await Task.WhenAll(all, due, learned, seen);
 
             await SaveCountAsync(
                 new Count
@@ -171,7 +150,7 @@ namespace Udenad.Core
                     Date = DateTime.Today.Date,
                     All = all.Result,
                     Due = due.Result,
-                    Mature = mature.Result,
+                    Learned = learned.Result,
                     Seen = seen.Result
                 });
         }
