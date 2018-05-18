@@ -42,9 +42,11 @@ charts.progressTrend = {
                 data.map(function (d) { return d.seen; }),
                 data.map(function (d) { return d.shift; }));
 
+
+            var learned_data = data.filter(d => d.learned > 0);
             var learned_regression = linearRegression(
-                data.map(function (d) { return d.learned; }),
-                data.map(function (d) { return d.shift; }));
+                learned_data.map(function (d) { return d.learned; }),
+                learned_data.map(function (d) { return d.shift; }));
 
             //x.domain(d3.extent(data, function (d) { return d.date; }));
             // x.domain([data[0].date, new Date(data[0].date).setDate(data[0].date.getDate() + data[0].all / seen_regression.slope)]);
