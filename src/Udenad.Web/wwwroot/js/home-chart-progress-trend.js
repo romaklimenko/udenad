@@ -1,6 +1,4 @@
-var charts = charts || {};
-
-charts.progressTrend = {
+const progressTrend = {
     render: function (url, selector) {
         var svg = d3.select(selector),
             margin = { top: 20, right: 20, bottom: 30, left: 50 },
