@@ -64,19 +64,18 @@ const forecast = {
                 .scale(y)
                 .ticks(10)
 
-            // https://material.io/design/color/#tools-for-picking-colors
             const colors = [
-                '#FFFFFF', // 0
-                '#FFEBEE', // 1
-                '#FFCDD2', // 2
-                '#EF9A9A', // 3
-                '#E57373', // 4
-                '#EF5350', // 5
-                '#F44336', // 6
-                '#E53935', // 7
-                '#D32F2F', // 8
-                '#C62828', // 9
-                '#B71C1C' // 10
+                '#00C852',
+                '#00C922',
+                '#0DCA00',
+                '#3FCB00',
+                '#71CD00',
+                '#A3CE00',
+                '#CFC800',
+                '#D19700',
+                '#D26500',
+                '#D33300',
+                '#D50000'
             ]
 
             svg.append('g')
@@ -99,7 +98,7 @@ const forecast = {
                 .append('rect')
                 .style('fill', d => colors[Math.round(d.average)])
                 .attr('x', d => x(d.date))
-                .attr('width', d => x.bandwidth() * d.average / 10)
+                .attr('width', d => x.bandwidth())
                 .attr('y', d => y(d.count))
                 .attr('height', d => height - y(d.count))
                 .append('title')
