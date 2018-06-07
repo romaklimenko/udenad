@@ -36,7 +36,7 @@ const repetitions = {
             svg.selectAll("bar")
                 .data(data)
                 .enter().append("rect")
-                .style("fill", "#E31836")
+                .style("fill", "#D50000")
                 .attr("x", function (d) { return x(d.repetitions); })
                 .attr("width", x.bandwidth())
                 .attr("y", function (d) { return y(d.count); })
