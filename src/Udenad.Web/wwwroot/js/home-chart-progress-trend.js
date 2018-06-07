@@ -56,7 +56,7 @@ const progressTrend = {
             // area path
             g.append("path")
                 .datum(data)
-                .attr("fill", "#E31836")
+                .attr("fill", "#D50000")
                 .attr("d", area);
 
             g.append("line")
