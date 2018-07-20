@@ -45,11 +45,13 @@ const learningSet = {
         d3.json(url, (error, data) => {
             if (error) throw error
 
+            let diffDays;
+
             data.forEach(value => {
                 value.date = new Date(value.date)
 
                 const timeDiff = Math.abs(data[0].date.getTime() - value.date.getTime())
-                const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24))
+                diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24))
 
                 value.shift = diffDays
             })
