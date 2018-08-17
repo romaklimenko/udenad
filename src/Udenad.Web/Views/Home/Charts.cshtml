@@ -3,33 +3,32 @@
 }
 
 <div class="row justify-content-md-center fullscreen">
-    <svg width="960" height="500" id="chart-progress-trend"></svg>
+    <svg width="1200" height="500" id="chart-forecast"></svg>
 </div>
 
 <div class="row justify-content-md-center fullscreen">
-    <svg width="960" height="500" id="chart-learning-set"></svg>
+    <svg width="1200" height="500" id="chart-repetitions"></svg>
 </div>
 
 <div class="row justify-content-md-center fullscreen">
-    <svg width="960" height="500" id="chart-forecast"></svg>
+    <svg width="1200" height="500" id="chart-progress-trend"></svg>
 </div>
 
 <div class="row justify-content-md-center fullscreen">
-    <svg width="960" height="500" id="chart-repetitions"></svg>
+    <svg width="1200" height="500" id="chart-learning-set"></svg>
 </div>
-
 
 @section scripts {
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    // <script type="text/javascript" src="~/js/home-chart-progress.js"></script>
-    <script type="text/javascript" src="~/js/home-chart-progress-trend.js"></script>
-    // <script type="text/javascript" src="~/js/home-chart-learning-set.js"></script>
+    <script type="text/javascript" src="~/js/linearRegression.js"></script>
     <script type="text/javascript" src="~/js/home-chart-forecast.js"></script>
     <script type="text/javascript" src="~/js/home-chart-repetitions.js"></script>
+    <script type="text/javascript" src="~/js/home-chart-progress-trend.js"></script>
+    <script type="text/javascript" src="~/js/home-chart-learning-set.js"></script>
     <script>
-        progressTrend.render('counts', '#chart-progress-trend')
-        learningSet.render('counts', '#chart-learning-set')
         forecast.render('forecast', '#chart-forecast')
         repetitions.render('repetitions', '#chart-repetitions')
+        progressTrend.render('counts', '#chart-progress-trend')
+        learningSet.render('counts', '#chart-learning-set')
     </script>
 }

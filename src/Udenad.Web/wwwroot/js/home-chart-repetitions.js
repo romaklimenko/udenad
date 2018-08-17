@@ -1,7 +1,7 @@
 const repetitions = {
     render: function (url, selector) {
         var margin = { top: 20, right: 20, bottom: 70, left: 50 },
-            width = 960 - margin.left - margin.right,
+            width = 1200 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
         var x = d3.scaleBand().rangeRound([0, width], .05).padding(0.1);
