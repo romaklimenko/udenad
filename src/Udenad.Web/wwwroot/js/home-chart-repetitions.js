@@ -2,7 +2,7 @@ const repetitions = {
     render: function (url, selector) {
         var margin = { top: 20, right: 20, bottom: 70, left: 50 },
             width = 1200 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+            height = 600 - margin.top - margin.bottom;
 
         var x = d3.scaleBand().rangeRound([0, width], .05).padding(0.1);
         var y = d3.scaleLinear().range([height, 0]);
@@ -18,7 +18,7 @@ const repetitions = {
             "translate(" + margin.left + "," + margin.top + ")");
         d3.json(url, function (error, data) {
             x.domain(data.map(function (d) { return d.repetitions; }));
-            y.domain([0, 94137]);
+            y.domain([0, d3.max(data, d => d.count)]);
             svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")

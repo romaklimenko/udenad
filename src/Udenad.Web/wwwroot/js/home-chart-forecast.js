@@ -30,7 +30,7 @@ const forecast = {
             left: 50
         }
         const width = 1200 - margin.left - margin.right
-        const height = 500 - margin.top - margin.bottom
+        const height = 600 - margin.top - margin.bottom
 
         const svg = d3.select('#chart-forecast')
             .attr('width', width + margin.left + margin.right)
@@ -77,7 +77,7 @@ const forecast = {
 
             const y = d3.scaleLinear()
                 .range([height, 0])
-                .domain([0, d3.max(data, d => d.count)])
+                .domain([0, d3.max(data, d => Math.max(d.count, 100))])
 
             const xAxis = d3.axisBottom()
                 .scale(x)
