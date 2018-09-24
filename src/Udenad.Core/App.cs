@@ -120,8 +120,6 @@ namespace Udenad.Core
                     {
                         IsUpsert = true
                     });
-
-            await SaveCountsAsync();
         }
 
         private static async Task SaveCountAsync(Count count) =>
@@ -133,27 +131,6 @@ namespace Udenad.Core
                     {
                         IsUpsert = true
                     });
-
-        public static async Task SaveCountsAsync()
-        {
-            // WONTFIX: it is slow but it is ok for now
-            var all = CountAsync(c => true);
-            var due = CountAsync(c => c.NextDate <= DateTime.Today);
-            var learned = CountAsync(c => c.Repetitions > 10);
-            var seen = CountAsync(c => c.NextDate != null);
-
-            await Task.WhenAll(all, due, learned, seen);
-
-            await SaveCountAsync(
-                new Count
-                {
-                    Date = DateTime.Today.Date,
-                    All = all.Result,
-                    Due = due.Result,
-                    Learned = learned.Result,
-                    Seen = seen.Result
-                });
-        }
 
         private static async Task<long> CountAsync(Expression<Func<Card, bool>> expression) =>
             await CardsCollection.CountAsync(expression);

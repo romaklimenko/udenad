@@ -18,7 +18,6 @@ namespace Udenad.Web.Controllers
         public HomeController(IHostingEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
-            App.SaveCountsAsync().GetAwaiter().GetResult();
         }
 
         // GET /
@@ -67,22 +66,7 @@ namespace Udenad.Web.Controllers
         public IActionResult Charts() => View();
 
         [HttpGet("counts")]
-        public async Task<JsonResult> Counts()
-        {
-            var result = Json(await App.GetCountsAsync());
-            var path = Path.Combine(
-                _hostingEnvironment.WebRootPath,
-                "data", "counts.json");
-            var serializerSettings = new JsonSerializerSettings()
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Formatting = Formatting.Indented
-            };
-            System.IO.File.WriteAllText(
-                path, JsonConvert.SerializeObject(result.Value, serializerSettings));
-
-            return result;
-        }
+        public async Task<JsonResult> Counts() => Json(await App.GetCountsAsync());
 
         [HttpGet("forecast")]
         public async Task<JsonResult> Forecast() =>
