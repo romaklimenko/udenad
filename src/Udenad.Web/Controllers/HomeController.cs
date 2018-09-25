@@ -18,6 +18,7 @@ namespace Udenad.Web.Controllers
         public HomeController(IHostingEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
+            App.SaveCountsAsync().GetAwaiter().GetResult();
         }
 
         // GET /
