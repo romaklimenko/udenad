@@ -77,7 +77,7 @@ const forecast = {
 
             const y = d3.scaleLinear()
                 .range([height, 0])
-                .domain([0, d3.max(data, d => Math.max(d.count, 100))])
+                .domain([0, d3.max(data, d => Math.max(d.count, 50))])
 
             const xAxis = d3.axisBottom()
                 .scale(x)

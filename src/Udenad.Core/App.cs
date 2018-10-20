@@ -28,20 +28,9 @@ namespace Udenad.Core
 
         public static async Task<Card> GetNextCardAsync()
         {
-            var due = CardsCollection.FindAsync(c => c.NextDate <= DateTime.Today && c.Repetitions < 11); // all due date
-            var unseen = FindRandomOneAsync(c => c.NextDate == null);               // and one new
-
-            await Task.WhenAll(due, unseen);
-
-            var cards = due.Result.ToList()
-                .Union(unseen.Result == null ? Enumerable.Empty<Card>() : Enumerable.Repeat(unseen.Result, 1))
-                .ToArray();
-
-            var card = cards
-                .Skip(new Random().Next(cards.Length))
-                .FirstOrDefault();
-
-            return card;
+            return
+                await FindRandomOneAsync(c => c.NextDate <= DateTime.Today && c.Repetitions < 11) ??
+                await FindRandomOneAsync(c => c.NextDate == null);
         }
 
         private static async Task<Card> FindRandomOneAsync(Expression<Func<Card, bool>> filter)
