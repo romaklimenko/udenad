@@ -53,7 +53,10 @@
 </div>
 
 <div id="status-top">
-    <small>@(Model.Item1.Repetitions)</small>
+    @if(Model.Item1.Repetitions == 0 && Model.Item1.NextDate == null)
+    {
+        <span>new!</span>
+    }
 </div>
 
 <div id="status-front">
